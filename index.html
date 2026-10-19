@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>拌麵出餐挑戰 v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#eef0ec; --card:#fbfbf8; --ink:#22304a; --soft:#5f6b80; --line:#c3cbd8;
+  --brand:#405880; --deep:#2b3d60; --steel:#d9dee6; --steel-2:#c4ccd7;
+  --good:#4d7a52; --bad:#b4523c; --gold:#c39638;
+  --serif:"Noto Serif TC","Songti TC","PMingLiu",serif;
+  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+#app{height:100%;max-width:460px;margin:0 auto;display:flex;flex-direction:column;padding-block:8px;padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));gap:8px}
+
+/* 開始畫面 */
+.intro{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:12px}
+.intro h1{font-family:var(--serif);font-weight:900;font-size:clamp(30px,9vw,40px);letter-spacing:.12em;color:var(--deep);margin:0}
+.intro .brand{font-family:var(--serif);letter-spacing:.4em;color:var(--brand);font-size:13px}
+.intro p{margin:0;color:var(--soft);line-height:1.7;font-size:14px;max-width:320px}
+.howto{list-style:none;padding:0;margin:4px 0 0;display:grid;gap:8px;text-align:left;font-size:14px;max-width:320px;width:100%}
+.howto li{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.howto b{width:24px;height:24px;flex:none;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:12px}
+.primary{background:var(--brand);color:#fff;font-family:var(--serif);font-weight:700;font-size:20px;letter-spacing:.3em;padding:14px 0;width:min(100%,300px);border-radius:14px;box-shadow:0 4px 0 var(--deep)}
+.primary:active{transform:translateY(3px);box-shadow:0 1px 0 var(--deep)}
+.seg{display:inline-flex;border:1.5px solid var(--brand);border-radius:999px;overflow:hidden}
+.seg button{padding:6px 14px;font-size:13px;color:var(--brand)}
+.seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+.best{font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums;min-height:18px}
+
+/* HUD */
+.hud{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:end;font-variant-numeric:tabular-nums;padding:0 4px}
+.hud .lbl{font-size:10.5px;letter-spacing:.14em;color:var(--soft)}
+.hud .val{font-family:var(--serif);font-weight:700;font-size:20px;color:var(--deep);line-height:1.1}
+.hud .r{text-align:right}
+.hud .clock.low .val{color:var(--bad)}
+.stagebar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--soft);padding:0 4px;min-height:18px}
+.stagebar .combo{color:var(--gold);font-weight:700}
+.tip{background:var(--card);border:1px dashed var(--brand);border-radius:10px;padding:7px 10px;font-size:13px;color:var(--deep);text-align:center;min-height:34px;display:flex;align-items:center;justify-content:center}
+
+/* 出餐台 */
+.pass{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
+.pass.one{grid-template-columns:1fr}
+.pass.one .slot{max-width:none}
+.slot{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 6px 8px;display:flex;flex-direction:column;align-items:stretch;min-width:0;transition:border-color .2s,box-shadow .2s}
+.slot.over{border-color:var(--brand);box-shadow:0 0 0 3px rgba(64,88,128,.18)}
+.slot.empty{opacity:.55;border-style:dashed}
+.slot.ready{border-color:var(--good);box-shadow:0 0 0 3px rgba(77,122,82,.2)}
+.slot svg.dish{width:100%;height:auto;display:block;max-height:160px}
+.slot .ticket{font-size:12px;color:var(--soft);display:flex;justify-content:space-between;gap:6px;padding:0 2px}
+.slot .name{font-family:var(--serif);font-weight:700;font-size:14px;color:var(--ink);line-height:1.3;padding:2px 2px 0;min-height:36px}
+.slot .vip{color:#fff;background:var(--gold);border-radius:4px;padding:0 5px;font-size:11px;margin-left:4px}
+.slot .recipe{display:flex;flex-wrap:wrap;gap:3px;padding:2px;min-height:22px}
+.chip{font-size:11px;padding:1px 6px;border-radius:999px;border:1px dashed var(--line);color:var(--soft)}
+.chip.ok{border-style:solid;border-color:var(--good);color:var(--good)}
+.chip.ok::before{content:"✓ "}
+.bar{height:5px;border-radius:5px;background:var(--steel);overflow:hidden;margin:4px 2px 0}
+.bar i{display:block;height:100%;width:100%;background:var(--brand);transform-origin:left}
+.bar.warn i{background:var(--bad)}
+.serve{margin-top:6px;width:100%;padding:9px 0;border-radius:10px;background:var(--steel);color:var(--soft);font-family:var(--serif);font-weight:900;letter-spacing:.25em;font-size:15px;opacity:.6}
+.slot.ready .serve{background:var(--good);color:#fff;opacity:1;animation:pulse 1s infinite}
+@keyframes pulse{50%{filter:brightness(1.12)}}
+.slot .msg{position:absolute;left:50%;top:44%;transform:translateX(-50%);background:var(--bad);color:#fff;font-size:13px;padding:4px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:3}
+.slot .msg.show{opacity:1}
+.slot .msg.ok{background:var(--good)}
+.slot.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+.float{position:absolute;left:50%;top:40%;transform:translateX(-50%);font-family:var(--serif);font-weight:900;font-size:26px;color:var(--deep);pointer-events:none;animation:rise .9s ease-out forwards;z-index:4;text-shadow:0 2px 0 var(--paper)}
+@keyframes rise{to{transform:translate(-50%,-50px);opacity:0}}
+
+/* 廚房區 */
+.kitchen{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;background:linear-gradient(#dfe4eb,#cfd6e0);border-radius:16px;padding:8px;border:1px solid var(--steel-2)}
+.row-title{font-size:11px;letter-spacing:.14em;color:var(--soft);display:flex;justify-content:space-between;align-items:center}
+.stations{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.station{background:linear-gradient(#e9edf3,#d6dce5);border:1px solid var(--steel-2);border-radius:12px;padding:6px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:96px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.06)}
+.station.locked{opacity:.4}
+.station.over{border-color:var(--brand);box-shadow:0 0 0 3px rgba(64,88,128,.2)}
+.station .sname{font-size:12px;color:var(--deep);font-weight:700}
+.station .burners{display:flex;gap:6px}
+.burner{width:46px;height:46px;border-radius:50%;background:#b9c1cc;border:2px solid #9aa4b1;display:grid;place-items:center;position:relative;touch-action:none}
+.burner.on{background:radial-gradient(circle,#fff3d6 0%,#f0b25a 70%);box-shadow:0 0 12px rgba(240,140,60,.5)}
+.burner.ready{box-shadow:0 0 0 3px var(--good),0 0 14px rgba(77,122,82,.5)}
+.burner svg{width:38px;height:38px;pointer-events:none}
+.burner .prog{position:absolute;left:4px;right:4px;bottom:-7px;height:4px;border-radius:4px;background:var(--steel);overflow:hidden}
+.burner .prog i{display:block;height:100%;background:var(--brand)}
+.noodles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pack{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
+.pack svg{width:38px;height:38px;pointer-events:none}
+.pack span{font-size:10px;line-height:1.2;text-align:center;color:var(--ink)}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--brand);color:var(--brand);background:transparent;position:relative}
+.tab[aria-pressed="true"]{background:var(--brand);color:#fff}
+.tab.need::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--gold);border:1.5px solid #fff}
+.tab.locked{opacity:.35}
+.fridge{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;align-content:start;flex:1;min-height:0;overflow-y:auto}
+.ing{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:3px 1px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
+.ing svg{width:26px;height:26px;pointer-events:none}
+.ing span{font-size:9.5px;line-height:1.15;text-align:center;word-break:break-all}
+.ing.dim{opacity:.4}
+.ing .tag{font-size:9.5px;color:var(--gold);font-weight:700}
+.trash{align-self:flex-end;font-size:12px;color:var(--soft);padding:4px 10px;border:1px dashed var(--soft);border-radius:8px}
+
+/* 拖曳中的影子 */
+.ghost{position:fixed;left:0;top:0;pointer-events:none;z-index:50;transform:translate(-50%,-70%);opacity:.95;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25))}
+.ghost svg{width:52px;height:52px;display:block}
+.ghost span{display:block;font-size:11px;background:var(--deep);color:#fff;border-radius:6px;padding:1px 6px;margin-top:2px;white-space:nowrap;text-align:center}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:#fff;font-size:14px;padding:8px 14px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.toast.show{opacity:1}
+.toast.ok{background:var(--good)}
+.ing,.pack,.burner,.tab,.station{-webkit-touch-callout:none}
+
+/* 結算 */
+.result{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+.stars{display:flex;gap:6px}
+.stars svg{width:36px;height:36px}
+.rank{font-family:var(--serif);font-weight:900;font-size:30px;color:var(--deep);letter-spacing:.08em;margin:0}
+.big{font-family:var(--serif);font-weight:900;font-size:52px;line-height:1;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);width:100%;max-width:340px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.stats div+div{border-left:1px dotted var(--line)}
+.stats b{display:block;font-family:var(--serif);font-size:20px;font-variant-numeric:tabular-nums;color:var(--deep)}
+.stats span{font-size:11px;color:var(--soft)}
+.newbest{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.1em}
+.ghostbtn{font-size:13px;color:var(--brand);border:1px solid var(--brand);border-radius:999px;padding:6px 18px}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div id="app"></div>
+<script>
+window.IC={
+ egg:`<ellipse cx="20" cy="21" rx="16" ry="12.5" fill="#b9793e"/><ellipse cx="20" cy="21" rx="13" ry="9.8" fill="#f4e8cf"/><circle cx="20" cy="21" r="6.8" fill="#ee8020"/><circle cx="18" cy="19" r="2.2" fill="#ffc46a" opacity=".85"/>`,
+ wagyu:`<path d="M5 15 Q20 6 35 12 L33 28 Q18 35 7 28Z" fill="#5b3022"/><path d="M10 16 L28 26 M15 13 L32 22 M8 22 L22 30" stroke="#33170f" stroke-width="2"/><path d="M8 15 Q20 9 33 13" stroke="#8a5038" stroke-width="1.5" fill="none"/>`,
+ kailan:`<path d="M7 33 Q19 22 33 8" stroke="#567f32" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M14 26 Q6 14 16 8 Q26 6 24 18 Q22 26 14 26Z" fill="#2f5a22"/><path d="M24 17 Q34 18 34 28 Q26 32 22 24Z" fill="#3d6b2a"/><circle cx="15" cy="15" r="1.6" fill="#16200f"/><circle cx="20" cy="11" r="1.3" fill="#16200f"/><circle cx="29" cy="25" r="1.4" fill="#16200f"/>`,
+ kongxin:`<g fill="none" stroke="#86c84a" stroke-width="3.2"><circle cx="13" cy="15" r="6"/><circle cx="26" cy="13" r="5.5"/><circle cx="19" cy="27" r="6"/><circle cx="31" cy="26" r="5"/></g><g fill="none" stroke="#5e9a2e" stroke-width="1"><circle cx="13" cy="15" r="4"/><circle cx="19" cy="27" r="4"/></g>`,
+ squid:`<path d="M9 31 Q6 15 21 8 Q32 5 33 13 Q31 26 14 33Z" fill="#e8a083"/><path d="M14 26 L26 14 M12 21 L22 12 M18 29 L29 18" stroke="#8a4632" stroke-width="2"/><path d="M8 31 Q4 36 2 38 M10 32 Q8 37 7 39" stroke="#c97a60" stroke-width="2" fill="none"/>`,
+ woodear:`<path d="M8 22 Q6 10 18 9 Q28 8 30 16 Q34 26 22 31 Q12 34 8 22Z" fill="#1d1816"/><path d="M14 18 Q20 14 25 19 Q22 25 16 24" stroke="#4d403b" stroke-width="2" fill="none"/><path d="M24 26 Q32 24 34 30 Q30 35 25 32Z" fill="#2b2320"/>`,
+ chayote:`<g fill="none" stroke="#4e8a33" stroke-width="2.4" stroke-linecap="round"><path d="M5 34 Q14 20 22 16 Q30 12 35 5"/><path d="M14 22 Q10 15 14 11 Q18 9 17 14"/><path d="M24 15 Q28 22 33 21 Q36 18 33 16"/></g><path d="M18 18 Q12 26 20 28 Q26 24 18 18Z" fill="#3f7a2a"/>`,
+ cordyceps:`<g fill="none" stroke="#ef7a2b" stroke-width="2.6" stroke-linecap="round"><path d="M6 32 Q14 18 12 6"/><path d="M12 34 Q22 20 20 8"/><path d="M19 34 Q28 24 30 10"/><path d="M26 35 Q34 26 35 16"/></g>`,
+ sorghum:`<g fill="#8b3c22"><circle cx="13" cy="15" r="3.2"/><circle cx="21" cy="12" r="3"/><circle cx="27" cy="18" r="3.2"/><circle cx="17" cy="22" r="3.1"/><circle cx="24" cy="26" r="3"/><circle cx="12" cy="27" r="3"/><circle cx="30" cy="27" r="2.8"/></g><g fill="#c0603a"><circle cx="12" cy="14" r="1"/><circle cx="26" cy="17" r="1"/><circle cx="23" cy="25" r="1"/></g>`,
+ karasumi:`<g fill="#f2a63a"><circle cx="12" cy="14" r="1.6"/><circle cx="18" cy="11" r="1.3"/><circle cx="25" cy="13" r="1.7"/><circle cx="30" cy="19" r="1.3"/><circle cx="15" cy="20" r="1.8"/><circle cx="22" cy="19" r="1.5"/><circle cx="28" cy="25" r="1.7"/><circle cx="11" cy="26" r="1.4"/><circle cx="19" cy="27" r="1.7"/><circle cx="24" cy="31" r="1.3"/><circle cx="16" cy="32" r="1.1"/></g><rect x="9" y="4" width="22" height="5" rx="2.5" fill="#d9822a"/>`,
+ cauli:`<g fill="#efe2c4"><circle cx="13" cy="16" r="7"/><circle cx="22" cy="12" r="7"/><circle cx="28" cy="20" r="6.5"/><circle cx="18" cy="23" r="7"/></g><rect x="17" y="26" width="5" height="9" rx="2" fill="#e3d4ad"/><g fill="#5f4e3c"><circle cx="12" cy="14" r="1.3"/><circle cx="22" cy="10" r="1.2"/><circle cx="28" cy="19" r="1.4"/><circle cx="18" cy="22" r="1.1"/><circle cx="25" cy="15" r="1"/></g>`,
+ chicken:`<g fill="none" stroke-linecap="round"><path d="M7 26 Q16 14 30 12" stroke="#d7bb98" stroke-width="5"/><path d="M8 30 Q20 22 33 22" stroke="#f1dec3" stroke-width="5"/><path d="M11 20 Q20 10 32 8" stroke="#ead2b2" stroke-width="4"/><path d="M12 33 Q22 30 31 30" stroke="#e5ccaa" stroke-width="4"/></g>`,
+ garlicKoji:`<path d="M8 28 Q6 18 16 16 Q18 8 26 12 Q34 14 32 24 Q30 32 20 32 Q11 33 8 28Z" fill="#e6d8a8"/><path d="M14 20 Q20 16 26 19" stroke="#fff6d8" stroke-width="2" fill="none"/><g fill="#c9b47a"><circle cx="15" cy="26" r="1.2"/><circle cx="23" cy="25" r="1"/><circle cx="27" cy="20" r="1"/></g>`,
+ barley:`<g fill="#f4ecd8" stroke="#c7b68c" stroke-width="1"><ellipse cx="13" cy="15" rx="4.2" ry="3.2"/><ellipse cx="22" cy="12" rx="4" ry="3"/><ellipse cx="28" cy="19" rx="4.2" ry="3.3"/><ellipse cx="17" cy="22" rx="4.4" ry="3.2"/><ellipse cx="25" cy="27" rx="4" ry="3"/><ellipse cx="12" cy="28" rx="3.8" ry="3"/></g><g fill="#6d5a40"><circle cx="13" cy="15" r=".9"/><circle cx="28" cy="19" r=".9"/><circle cx="17" cy="22" r=".9"/></g>`,
+ chervil:`<path d="M20 36 L20 18" stroke="#4c8e36" stroke-width="1.8"/><g fill="#4d9a38"><path d="M20 18 Q10 16 9 8 Q16 6 20 14Z"/><path d="M20 18 Q30 16 31 8 Q24 6 20 14Z"/><path d="M20 16 Q17 6 20 2 Q23 6 20 16Z"/><path d="M20 24 Q10 24 7 18 Q14 16 20 22Z"/><path d="M20 24 Q30 24 33 18 Q26 16 20 22Z"/></g>`,
+ duck:`<g fill="none" stroke-linecap="round"><path d="M8 27 Q18 16 31 13" stroke="#7d4a43" stroke-width="5"/><path d="M9 32 Q21 24 33 24" stroke="#9b6157" stroke-width="5"/><path d="M12 21 Q21 12 31 7" stroke="#b07a6c" stroke-width="3.5"/></g>`,
+ arugula:`<path d="M10 34 Q18 22 28 6" stroke="#3f7f2e" stroke-width="1.8" fill="none"/><g fill="#4f9d3c"><path d="M28 6 Q36 12 30 20 Q24 18 28 6Z"/><path d="M22 16 Q14 10 10 16 Q14 22 22 18Z"/><path d="M24 20 Q32 22 32 30 Q26 30 23 22Z"/><path d="M17 25 Q9 22 6 28 Q10 33 17 27Z"/></g>`,
+ crispyRice:`<g fill="#fcf8ee" stroke="#d6c9ac" stroke-width=".9"><ellipse cx="12" cy="15" rx="3.5" ry="2.4"/><ellipse cx="18" cy="12" rx="3.2" ry="2.3"/><ellipse cx="24" cy="14" rx="3.5" ry="2.4"/><ellipse cx="29" cy="19" rx="3.2" ry="2.3"/><ellipse cx="14" cy="21" rx="3.4" ry="2.4"/><ellipse cx="21" cy="20" rx="3.6" ry="2.5"/><ellipse cx="27" cy="25" rx="3.4" ry="2.3"/><ellipse cx="17" cy="27" rx="3.5" ry="2.4"/><ellipse cx="23" cy="31" rx="3.1" ry="2.2"/></g>`,
+ kombu:`<g fill="none" stroke="#2a2a28" stroke-width="3" stroke-linecap="round"><path d="M5 14 Q12 6 16 14 Q20 22 27 14 Q31 9 36 13"/><path d="M6 28 Q13 20 18 28 Q23 35 30 26"/></g><g fill="#8b8f8c"><circle cx="12" cy="10" r=".9"/><circle cx="22" cy="18" r=".9"/><circle cx="16" cy="27" r=".9"/><circle cx="27" cy="27" r=".9"/></g>`,
+ buckwheat:`<g fill="#c9a26a" stroke="#9d7a48" stroke-width=".8"><path d="M10 12 L15 10 L13 16Z"/><path d="M20 9 L25 11 L21 15Z"/><path d="M27 17 L32 19 L28 22Z"/><path d="M13 22 L18 20 L17 26Z"/><path d="M22 23 L27 24 L23 29Z"/><path d="M9 29 L14 28 L11 33Z"/><path d="M28 29 L33 30 L29 34Z"/></g>`,
+ gingerSoy:`<ellipse cx="20" cy="23" rx="16" ry="10" fill="#3b2516"/><ellipse cx="15" cy="20" rx="5" ry="2" fill="#6b4a32"/><g fill="#d8c48c"><circle cx="22" cy="25" r="1"/><circle cx="26" cy="21" r="1"/><circle cx="14" cy="27" r="1"/></g>`,
+ sugar:`<path d="M6 32 Q20 14 34 32Z" fill="#f7f6f2" stroke="#cfd3d8" stroke-width="1.2"/><g fill="#cfd3d8"><circle cx="14" cy="10" r="1"/><circle cx="20" cy="7" r="1"/><circle cx="26" cy="11" r="1"/><circle cx="18" cy="14" r=".8"/><circle cx="23" cy="16" r=".8"/></g>`,
+ miso:`<path d="M6 10 Q14 6 20 12 T34 12 M6 20 Q14 16 20 22 T34 22 M6 30 Q14 26 20 32 T34 32" stroke="#d29c2a" stroke-width="3.4" fill="none" stroke-linecap="round"/>`,
+ sesame:`<g fill="#fbf7ea" stroke="#c4b48a" stroke-width=".9"><ellipse cx="12" cy="13" rx="2.6" ry="1.6" transform="rotate(-30 12 13)"/><ellipse cx="22" cy="10" rx="2.6" ry="1.6" transform="rotate(20 22 10)"/><ellipse cx="29" cy="18" rx="2.6" ry="1.6"/><ellipse cx="16" cy="21" rx="2.6" ry="1.6" transform="rotate(40 16 21)"/><ellipse cx="25" cy="26" rx="2.6" ry="1.6" transform="rotate(-20 25 26)"/><ellipse cx="11" cy="29" rx="2.6" ry="1.6"/><ellipse cx="19" cy="31" rx="2.6" ry="1.6" transform="rotate(60 19 31)"/></g>`,
+ sauce:`<path d="M20 5 Q31 20 31 25 A11 11 0 0 1 9 25 Q9 20 20 5Z" fill="#c4802c"/><path d="M15 23 Q15 18 19 14" stroke="#efb867" stroke-width="2.2" fill="none" stroke-linecap="round"/>`,
+ nuts:`<g fill="#d8ad74" stroke="#a87d47" stroke-width=".8"><path d="M9 14 L15 11 L16 17 L10 18Z"/><path d="M20 9 L26 10 L24 15 L19 14Z"/><path d="M27 18 L33 19 L31 24 L26 23Z"/><path d="M14 22 L20 21 L19 27 L13 26Z"/><path d="M22 27 L28 27 L27 32 L21 31Z"/><path d="M8 28 L12 27 L12 32 L8 32Z"/></g>`,
+ garlicSoy:`<ellipse cx="20" cy="22" rx="15" ry="13" fill="#fdfdfb" stroke="#d6d6d0" stroke-width="1.4"/><ellipse cx="20" cy="22" rx="10.5" ry="9" fill="#d9761f"/><g fill="#f6c27c"><circle cx="17" cy="20" r="1.1"/><circle cx="23" cy="23" r="1.1"/><circle cx="19" cy="26" r="1"/><circle cx="24" cy="18" r="1"/></g>`,
+ lettuce:`<path d="M5 26 Q4 14 14 12 Q16 5 24 8 Q33 8 34 18 Q38 26 30 31 Q22 35 14 33 Q5 33 5 26Z" fill="#8fce4c"/><path d="M10 28 Q20 20 30 14 M16 22 L14 15 M22 19 L24 12 M26 22 L32 24" stroke="#c9ec8c" stroke-width="1.6" fill="none"/>`,
+ greenBean:`<g stroke-linecap="round" fill="none"><path d="M6 30 L32 8" stroke="#4f9a35" stroke-width="3"/><path d="M8 35 L35 16" stroke="#5aab3e" stroke-width="2.6"/><path d="M4 22 L24 5" stroke="#438a2d" stroke-width="2.6"/></g>`,
+ tremella:`<path d="M8 24 Q6 12 17 11 Q20 4 28 9 Q36 14 32 23 Q34 32 23 32 Q12 34 8 24Z" fill="#f3eddc" stroke="#d6c9a4" stroke-width="1.2"/><path d="M14 22 Q18 15 24 18 Q28 22 22 26" stroke="#d6c9a4" stroke-width="1.2" fill="none"/>`,
+ puree:`<path d="M6 28 Q4 18 14 16 Q16 8 25 10 Q35 12 34 22 Q36 31 24 33 Q10 35 6 28Z" fill="#f1ad1c"/><path d="M13 20 Q19 16 26 18" stroke="#fbd474" stroke-width="2" fill="none"/>`,
+ brownSugar:`<path d="M5 12 L35 8 M5 19 L35 15 M5 26 L35 22 M5 33 L35 29" stroke="#3f1d0e" stroke-width="2.6" stroke-linecap="round"/><g fill="#3f1d0e"><circle cx="35" cy="8" r="2"/><circle cx="35" cy="15" r="2"/><circle cx="35" cy="22" r="2"/><circle cx="35" cy="29" r="2"/></g>`,
+ nitroBall:`<circle cx="20" cy="21" r="14" fill="#fdfdfb" stroke="#dcdcd4" stroke-width="1.2"/><path d="M12 24 Q14 30 22 31" stroke="#e8e6dc" stroke-width="2.5" fill="none"/><circle cx="15" cy="15" r="3" fill="#fff"/>`,
+ fridge:`<rect x="9" y="4" width="22" height="32" rx="3" fill="#dfe5ec" stroke="#405880" stroke-width="2"/><path d="M9 15 H31" stroke="#405880" stroke-width="2"/><path d="M27 8 V12 M27 19 V27" stroke="#405880" stroke-width="2.2" stroke-linecap="round"/>`,
+ wok:`<path d="M4 18 H30 Q30 30 17 30 Q4 30 4 18Z" fill="#3a3f46"/><path d="M30 20 L38 16" stroke="#7a5a3a" stroke-width="3.4" stroke-linecap="round"/><path d="M10 14 Q12 10 10 6 M17 14 Q19 9 17 5 M24 14 Q26 10 24 6" stroke="#e0662c" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+ oven:`<rect x="4" y="7" width="32" height="26" rx="3" fill="#dfe5ec" stroke="#405880" stroke-width="2"/><rect x="8" y="11" width="18" height="18" rx="2" fill="#2f3b4e"/><circle cx="31" cy="14" r="2" fill="#405880"/><circle cx="31" cy="21" r="2" fill="#405880"/><path d="M11 20 Q14 17 17 20 T23 20" stroke="#f0a050" stroke-width="1.6" fill="none"/>`,
+ stove:`<rect x="5" y="27" width="30" height="7" rx="2" fill="#3a3f46"/><path d="M20 6 Q28 14 26 20 Q25 25 20 26 Q14 25 14 20 Q13 15 18 12 Q18 17 21 17 Q22 12 20 6Z" fill="#e8662a"/><path d="M20 15 Q24 19 22 23 Q20 25 18 22 Q18 19 20 15Z" fill="#ffc04a"/>`,
+ glass:`<path d="M9 10 H31 L29 31 Q28 34 25 34 H15 Q12 34 11 31Z" fill="#e5f0f3" stroke="#8fb0bd" stroke-width="2"/><path d="M14 14 L13 28" stroke="#fff" stroke-width="2" stroke-linecap="round"/>`,
+};
+</script>
+<script>
+window.DATA = {
+  // 五款拌麵的麵體
+  BASES: {
+    camellia: { zh: "山茶花粗捲麵", en: "Camellia curly", color: "#e7b64a", wave: "curly" },
+    squidink: { zh: "墨魚汁中直麵", en: "Squid ink straight", color: "#1d1d22", wave: "straight" },
+    knife:    { zh: "刀削波浪麵", en: "Knife-cut wavy", color: "#ecc56a", wave: "ribbon" },
+    golden:   { zh: "澳洲黃金小麥", en: "Golden wheat", color: "#e2c26a", wave: "straight" },
+    stone:    { zh: "石臼細扁麵", en: "Stone-mill flat", color: "#d6b06a", wave: "thin" }
+  },
+
+  // 爐台：需要先把生食材拖上去，等它做好再拖到碗裡
+  STATIONS: {
+    wok:   { zh: "炒鍋", en: "Wok", icon: "wok", time: 3, phase: 0, accepts: ["wagyu", "squid", "kailan", "cauli", "pork", "tripe"] },
+    oven:  { zh: "蒸烤箱", en: "Combi oven", icon: "oven", time: 4, phase: 1, accepts: ["jowl", "duck", "chickenleg"] },
+    stove: { zh: "爐火", en: "Stove", icon: "stove", time: 4, phase: 2, accepts: ["broth1", "broth2"] }
+  },
+
+  // 食材：station 有值代表要先上爐台；icon 對應 IC 裡的圖
+  ING: {
+    egg:        { zh: "溏心蛋", en: "Soft egg", icon: "egg" },
+    kongxin:    { zh: "醋漬空心菜", en: "Pickled water spinach", icon: "kongxin" },
+    woodear:    { zh: "醋漬雲耳", en: "Pickled wood ear", icon: "woodear" },
+    chayote:    { zh: "龍鬚菜", en: "Chayote shoots", icon: "chayote" },
+    cordyceps:  { zh: "蟲草花", en: "Cordyceps", icon: "cordyceps" },
+    sorghum:    { zh: "炸高粱", en: "Fried sorghum", icon: "sorghum" },
+    karasumi:   { zh: "烏魚子粉", en: "Mullet roe", icon: "karasumi" },
+    chicken:    { zh: "雞肉絲", en: "Shredded chicken", icon: "chicken" },
+    garlicKoji: { zh: "大蒜鹽麴醬", en: "Garlic shio-koji", icon: "garlicKoji" },
+    barley:     { zh: "炸薏仁", en: "Fried Job's tears", icon: "barley" },
+    chervil:    { zh: "山蘿蔔葉", en: "Chervil", icon: "chervil" },
+    arugula:    { zh: "芝麻葉", en: "Arugula", icon: "arugula" },
+    crispyRice: { zh: "炸鍋巴", en: "Crispy rice", icon: "crispyRice" },
+    wagyu:      { zh: "和牛臉頰", en: "Wagyu cheek", icon: "wagyu", station: "wok" },
+    squid:      { zh: "中卷", en: "Squid", icon: "squid", station: "wok" },
+    kailan:     { zh: "芥藍花", en: "Kailan", icon: "kailan", station: "wok" },
+    cauli:      { zh: "白花椰", en: "Cauliflower", icon: "cauli", station: "wok" },
+    pork:       { zh: "炒豬肉", en: "Stir-fried pork", icon: "duck", station: "wok" },
+    tripe:      { zh: "牛肚", en: "Beef tripe", icon: "woodear", station: "wok" },
+    duck:       { zh: "油封鴨腿絲", en: "Duck confit", icon: "duck", station: "oven" },
+    jowl:       { zh: "松阪豬", en: "Pork jowl", icon: "wagyu", station: "oven" },
+    chickenleg: { zh: "文昌雞腿", en: "Chicken leg", icon: "chicken", station: "oven" },
+    kombu:      { zh: "鹽昆布絲", en: "Shio kombu", icon: "kombu" },
+    buckwheat:  { zh: "炸蕎麥", en: "Fried buckwheat", icon: "buckwheat" },
+    gingerSoy:  { zh: "薑汁醬油", en: "Ginger soy", icon: "gingerSoy" },
+    sugar:      { zh: "糖粉", en: "Powdered sugar", icon: "sugar" },
+    miso:       { zh: "味噌醬", en: "Miso dressing", icon: "miso" },
+    sesame:     { zh: "白芝麻", en: "White sesame", icon: "sesame" },
+    sauce:      { zh: "堅果醬汁", en: "Nut sauce", icon: "sauce" },
+    nuts:       { zh: "堅果碎", en: "Crushed nuts", icon: "nuts" },
+    garlicSoy:  { zh: "蒜蓉醬油", en: "Garlic soy", icon: "garlicSoy" },
+    lettuce:    { zh: "生菜", en: "Lettuce", icon: "lettuce" },
+    bamboo:     { zh: "筍片", en: "Bamboo shoots", icon: "chayote" },
+    greenBean:  { zh: "四季豆絲", en: "Green beans", icon: "greenBean" },
+    broth1:     { zh: "酸白菜湯底", en: "Pickled cabbage broth", icon: "miso", station: "stove" },
+    broth2:     { zh: "干貝雞湯底", en: "Scallop chicken broth", icon: "sauce", station: "stove" },
+    tremella:   { zh: "銀耳雪燕", en: "Snow fungus", icon: "tremella" },
+    puree:      { zh: "地瓜南瓜醬", en: "Yam purée", icon: "puree" },
+    brownSugar: { zh: "黑糖", en: "Brown sugar", icon: "brownSugar" },
+    nitroBall:  { zh: "氮氣球", en: "Nitro foam", icon: "nitroBall" }
+  },
+
+  // 菜單：cat 決定容器與出現時機；ordered 代表甜品要照順序加
+  DISHES: [
+    { id: "n1", cat: "noodle", no: "①", zh: "炙燒和牛臉頰拌麵", en: "Seared Wagyu Cheek Noodles", price: 380, base: "camellia", items: ["wagyu", "kailan", "egg", "kongxin"] },
+    { id: "n2", cat: "noodle", no: "②", zh: "黑豉椒香墨魚麵", en: "Squid Ink Noodles", price: 290, base: "squidink", items: ["squid", "kailan", "egg", "woodear"] },
+    { id: "n3", cat: "noodle", no: "③", zh: "蝦汁烏魚子刀削麵", en: "Knife-Cut Mullet Roe Noodles", price: 280, base: "knife", items: ["chayote", "cordyceps", "sorghum", "karasumi"] },
+    { id: "n4", cat: "noodle", no: "④", zh: "野菜雞絲拌麵", en: "Shredded Chicken Noodles", price: 280, base: "golden", items: ["cauli", "chicken", "garlicKoji", "barley", "egg", "chervil"] },
+    { id: "n5", cat: "noodle", no: "⑤", zh: "油封鴨腿絲拌麵", en: "Duck Confit Noodles", price: 260, base: "stone", items: ["duck", "arugula", "egg", "crispyRice"] },
+
+    { id: "s1", cat: "side", zh: "昆布漬黃瓜", en: "Kombu Cucumber", price: 40, items: ["kombu"] },
+    { id: "s2", cat: "side", zh: "川麻雨來菇", en: "Mala Nostoc", price: 60, items: ["buckwheat"] },
+    { id: "s3", cat: "side", zh: "薑汁番茄", en: "Ginger Tomato", price: 60, items: ["gingerSoy", "sugar"] },
+    { id: "s4", cat: "side", zh: "豆香味噌秋葵", en: "Miso Okra", price: 60, items: ["miso"] },
+    { id: "s5", cat: "side", zh: "紅麴高麗菜乾", en: "Red Koji Cabbage", price: 60, items: ["sesame"] },
+    { id: "s6", cat: "side", zh: "堅果豆腐", en: "Nut Tofu", price: 60, items: ["sauce", "nuts"] },
+    { id: "s7", cat: "side", zh: "肉香花椰菜乾", en: "Cauliflower with Pork", price: 120, items: ["cauli", "pork"] },
+    { id: "s8", cat: "side", zh: "油封白切松阪豬", en: "Pork Jowl", price: 180, items: ["jowl", "garlicSoy"] },
+    { id: "s9", cat: "side", zh: "辣炒筍牛肚", en: "Beef Tripe", price: 220, items: ["tripe", "bamboo"] },
+    { id: "s10", cat: "side", zh: "油封文昌雞腿", en: "Wenchang Chicken Leg", price: 240, items: ["chickenleg", "lettuce"] },
+
+    { id: "p1", cat: "soup", zh: "酸白菜蔬菜湯", en: "Pickled Cabbage Soup", price: 80, items: ["broth1", "greenBean"] },
+    { id: "p2", cat: "soup", zh: "干貝燉雞湯", en: "Scallop Chicken Soup", price: 200, items: ["broth2", "cordyceps"] },
+
+    { id: "d1", cat: "dessert", zh: "主廚甜品", en: "Chef's Dessert", price: 90, items: ["tremella", "puree", "brownSugar", "nitroBall"], ordered: true }
+  ],
+
+  // 每段時間解鎖的內容
+  PHASES: [
+    { until: 50, slots: 1, label: { zh: "第一段：拌麵", en: "Stage 1: Noodles" } },
+    { until: 110, slots: 2, label: { zh: "第二段：小菜上場", en: "Stage 2: Sides" } },
+    { until: 180, slots: 2, label: { zh: "第三段：湯與甜品", en: "Stage 3: Soups & dessert" } }
+  ],
+
+  // 冰箱分頁：每個食材歸到哪一頁，以及哪個階段開放
+  TABS: [
+    { key: "main", zh: "麵與主料", en: "Noodles", phase: 0 },
+    { key: "side", zh: "小菜", en: "Sides", phase: 1 },
+    { key: "soup", zh: "湯", en: "Soups", phase: 2 },
+    { key: "dessert", zh: "甜品", en: "Dessert", phase: 2 }
+  ]
+};
+</script>
+<script>
+// 畫面繪製：食材圖示、容器（碗／盤／玻璃杯）與麵條
+(function () {
+  const D = window.DATA, IC = window.IC;
+  const f1 = v => (Math.round(v * 10) / 10).toString();
+
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  function iconKey(id) {
+    const ing = D.ING[id];
+    return ing ? ing.icon : id;
+  }
+
+  function icon(id, size) {
+    return `<svg viewBox="0 0 40 40" width="${size}" height="${size}" aria-hidden="true">${IC[iconKey(id)] || ""}</svg>`;
+  }
+
+  function place(key, x, y, s, rot) {
+    return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${rot || 0}) scale(${s}) translate(-20 -20)">${IC[key] || ""}</g>`;
+  }
+
+  // 麵條：用一組彎曲的線條表現，依麵體形狀調整
+  function noodles(baseKey, cx, cy, r, seed) {
+    const b = D.BASES[baseKey];
+    const rand = rng(seed);
+    const n = b.wave === "straight" ? 16 : b.wave === "thin" ? 34 : 24;
+    const amp = b.wave === "curly" ? 3.2 : b.wave === "ribbon" ? 4.5 : b.wave === "thin" ? 2 : 1.2;
+    const w = b.wave === "ribbon" ? 6 : b.wave === "thin" ? 2.6 : 3.4;
+    const dark = shade(b.color, -0.35);
+    let under = "", over = "";
+    for (let i = 0; i < n; i++) {
+      const a = rand() * Math.PI * 2, d = Math.sqrt(rand()) * r;
+      let x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
+      let th = rand() * Math.PI * 2;
+      const pts = [[x, y]];
+      const len = b.wave === "straight" ? 52 : 30;
+      for (let s = 1; s <= 10; s++) {
+        th += (rand() - 0.5) * 0.9;
+        x += Math.cos(th) * len / 10;
+        y += Math.sin(th) * len / 10;
+        const off = amp * Math.sin(s * 1.6 + i);
+        pts.push([x - Math.sin(th) * off, y + Math.cos(th) * off]);
+      }
+      const d2 = "M" + pts.map(p => f1(p[0]) + " " + f1(p[1])).join(" L");
+      under += `<path d="${d2}" stroke="${dark}" stroke-width="${f1(w + 1.4)}"/>`;
+      over += `<path d="${d2}" stroke="${b.color}" stroke-width="${f1(w)}"/>`;
+    }
+    return `<g fill="none" stroke-linecap="round" stroke-linejoin="round">${under}${over}</g>`;
+  }
+
+  function shade(hex, p) {
+    const n = parseInt(hex.slice(1), 16);
+    const f = v => Math.max(0, Math.min(255, Math.round(p < 0 ? v * (1 + p) : v + (255 - v) * p)));
+    return "#" + [n >> 16, n >> 8 & 255, n & 255].map(v => f(v).toString(16).padStart(2, "0")).join("");
+  }
+
+  // 依容器種類排放食材
+  function arrangeRing(items, cx, cy, radius, s) {
+    if (items.length === 0) return "";
+    if (items.length === 1) return place(iconKey(items[0]), cx, cy, s * 1.15, 0);
+    let out = "";
+    items.forEach((id, i) => {
+      const a = (i / items.length) * Math.PI * 2 - Math.PI / 2;
+      out += place(iconKey(id), cx + Math.cos(a) * radius, cy + Math.sin(a) * radius, s, (i * 37) % 40 - 20);
+    });
+    return out;
+  }
+
+  function arrangeRow(items, cy, s) {
+    const n = items.length;
+    let out = "";
+    items.forEach((id, i) => {
+      const x = n === 1 ? 120 : 60 + (i * 120) / (n - 1);
+      out += place(iconKey(id), x, cy + (i % 2 ? 6 : -6), s, (i * 23) % 30 - 15);
+    });
+    return out;
+  }
+
+  function bowlSVG(dish, have, base, broth) {
+    const isSoup = dish.cat === "soup";
+    const inner = isSoup ? broth : "#f5f1e7";
+    let s = `<circle cx="120" cy="108" r="96" fill="rgba(34,48,74,.14)"/>`;
+    s += `<circle cx="120" cy="100" r="96" fill="#2f3b52"/>`;
+    s += `<circle cx="120" cy="100" r="86" fill="${shade("#2f3b52", 0.12)}"/>`;
+    s += `<circle cx="120" cy="100" r="80" fill="${inner}"/>`;
+    if (!isSoup) {
+      s += `<defs><clipPath id="bowlclip"><circle cx="120" cy="100" r="74"/></clipPath></defs>`;
+      if (base) s += `<g clip-path="url(#bowlclip)">${noodles(base, 120, 100, 58, dish.id.length * 97 + 11)}</g>`;
+      else s += `<circle cx="120" cy="100" r="60" fill="none" stroke="#d8d1bf" stroke-width="2" stroke-dasharray="5 6"/>`;
+    }
+    if (isSoup) s += `<circle cx="120" cy="100" r="60" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="3"/>`;
+    s += arrangeRing(have, 120, 100, 44, 1.2);
+    return s;
+  }
+
+  function plateSVG(dish, have) {
+    let s = `<rect x="22" y="34" width="200" height="140" rx="16" fill="rgba(34,48,74,.14)"/>`;
+    s += `<rect x="20" y="28" width="200" height="140" rx="16" fill="#d7d2c4"/>`;
+    s += `<rect x="30" y="38" width="180" height="120" rx="12" fill="#ebe7dc"/>`;
+    s += arrangeRow(have, 98, 1.25);
+    return s;
+  }
+
+  function glassSVG(dish, have) {
+    let s = `<path d="M62 22 L178 22 L166 186 Q164 196 152 196 L88 196 Q76 196 74 186 Z" fill="rgba(34,48,74,.14)" transform="translate(4 6)"/>`;
+    s += `<path d="M62 22 L178 22 L166 186 Q164 196 152 196 L88 196 Q76 196 74 186 Z" fill="#e8f2f5" stroke="#8fb0bd" stroke-width="3"/>`;
+    s += `<path d="M70 70 L170 70 L166 186 Q164 194 152 194 L88 194 Q76 194 74 186 Z" fill="#f7f1d9" opacity=".7"/>`;
+    const pos = [[104, 62], [138, 62], [104, 116], [138, 116], [121, 160]];
+    have.forEach((id, i) => { const p = pos[i] || pos[pos.length - 1]; s += place(iconKey(id), p[0], p[1], 1.05, 0); });
+    return s;
+  }
+
+  // 公開：畫出一個出餐容器
+  // dish: 菜色資料；have: 已加的食材；base: 已放的麵（只有麵才有）；broth: 湯底顏色
+  function dishSVG(dish, have, base, broth) {
+    let inner;
+    if (dish.cat === "noodle" || dish.cat === "soup") inner = bowlSVG(dish, have, base, broth);
+    else if (dish.cat === "dessert") inner = glassSVG(dish, have);
+    else inner = plateSVG(dish, have);
+    return `<svg class="dish" viewBox="0 0 240 210" role="img" aria-label="${dish.zh}">${inner}</svg>`;
+  }
+
+  // 麵條小圖示（麵櫃用）
+  function packSVG(baseKey) {
+    const b = D.BASES[baseKey];
+    return `<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#f3efe4" stroke="#c3cbd8"/><g clip-path="url(#pk${baseKey})"></g>${noodlesSmall(baseKey)}</svg>`;
+  }
+  function noodlesSmall(baseKey) {
+    const b = D.BASES[baseKey];
+    const dark = shade(b.color, -0.35);
+    const rand = rng(baseKey.length * 31 + baseKey.charCodeAt(0));
+    let under = "", over = "";
+    for (let i = 0; i < 9; i++) {
+      const a = rand() * 6.28, d = rand() * 12;
+      const x = 20 + Math.cos(a) * d, y = 20 + Math.sin(a) * d;
+      const x2 = x + 14 * Math.cos(a + 0.8), y2 = y + 14 * Math.sin(a + 0.8);
+      const d2 = `M${f1(x)} ${f1(y)} Q${f1((x + x2) / 2 + 3)} ${f1((y + y2) / 2 - 3)} ${f1(x2)} ${f1(y2)}`;
+      under += `<path d="${d2}" stroke="${dark}" stroke-width="3.6"/>`;
+      over += `<path d="${d2}" stroke="${b.color}" stroke-width="2.2"/>`;
+    }
+    return `<g fill="none" stroke-linecap="round">${under}${over}</g>`;
+  }
+
+  window.ART = { icon, dishSVG, packSVG, iconKey };
+})();
+</script>
+<script>
+// 遊戲規則：狀態、點單、爐台、判定與結算
+(function () {
+  const D = window.DATA;
+  const TOTAL = 180; // 一局 3 分鐘
+  const BEST_KEY = "jjs-rush-best";
+
+  const S = {
+    running: false, t: 0, phase: 0,
+    score: 0, revenue: 0, served: 0, missed: 0, mistakes: 0, taps: 0,
+    combo: 0, bestCombo: 0,
+    slots: [], stations: { wok: [], oven: [], stove: [] },
+    nextAt: [0, 0], nextEvent: 0,
+    lastIds: [], dishSeen: {}, uid: 0
+  };
+  window.S = S;
+  window.GAME_TOTAL = TOTAL;
+
+  function slotsFor(phase) { return D.PHASES[phase].slots; }
+  function phaseAt(t) {
+    for (let i = 0; i < D.PHASES.length; i++) if (t < D.PHASES[i].until) return i;
+    return D.PHASES.length - 1;
+  }
+  function stationUnlocked(key) { return D.STATIONS[key].phase <= S.phase; }
+  function stationFor(id) {
+    const ing = D.ING[id];
+    return ing && ing.station ? ing.station : null;
+  }
+  function stationOpenFor(id) {
+    // 找一台能做這個、而且還有空位的爐台
+    const keys = Object.keys(D.STATIONS);
+    for (const k of keys) {
+      if (!D.STATIONS[k].accepts.includes(id)) continue;
+      if (!stationUnlocked(k)) continue;
+      if (S.stations[k].length >= 2) continue;
+      return k;
+    }
+    return null;
+  }
+
+  function eligible(phase) {
+    return D.DISHES.filter(d =>
+      d.cat === "noodle" ||
+      (d.cat === "side" && phase >= 1) ||
+      ((d.cat === "soup" || d.cat === "dessert") && phase >= 2));
+  }
+
+  function makeOrder() {
+    const pool = eligible(S.phase);
+    const fresh = pool.filter(d => !S.lastIds.slice(-3).includes(d.id));
+    const dish = (fresh.length ? fresh : pool)[Math.floor(Math.random() * (fresh.length || pool.length))];
+    const base = dish.cat === "noodle" ? 100 : dish.cat === "side" ? 58 : 62;
+    const vip = S.phase >= 1 && Math.random() < 0.18;
+    const limit = (vip ? base * 0.8 : base) + (S.phase === 0 ? 15 : 0);
+    S.lastIds.push(dish.id);
+    const first = !S.dishSeen[dish.id];
+    S.dishSeen[dish.id] = true;
+    return { id: ++S.uid, dish, left: limit, limit, vip, mist: 0, first };
+  }
+
+  function emptySlot() { return { order: null, base: null, have: [] }; }
+
+  function resetGame() {
+    S.running = true; S.t = 0; S.phase = 0;
+    S.score = 0; S.revenue = 0; S.served = 0; S.missed = 0; S.mistakes = 0; S.taps = 0;
+    S.combo = 0; S.bestCombo = 0;
+    S.slots = [emptySlot(), emptySlot()];
+    S.stations = { wok: [], oven: [], stove: [] };
+    S.nextAt = [0.8, 2.5]; S.nextEvent = 30;
+    S.lastIds = []; S.dishSeen = {}; S.uid = 0;
+    fill();
+  }
+
+  function fill() {
+    const n = slotsFor(S.phase);
+    for (let i = 0; i < n; i++) {
+      const sl = S.slots[i];
+      if (!sl.order && S.t >= S.nextAt[i]) {
+        const o = makeOrder();
+        S.slots[i] = { order: o, base: null, have: [] };
+        if (o.first && o.dish.cat !== "noodle") { /* 新菜：介面會顯示做法 */ }
+      }
+    }
+  }
+
+  function burnTime() { return S.phase === 0 ? 14 : 10; }
+
+  // 判定：這個東西能不能放進第 i 格；回傳 null 代表可以，否則是提示文字
+  function check(i, payload) {
+    const sl = S.slots[i];
+    if (!sl || !sl.order) return "這格沒有客人";
+    const dish = sl.order.dish;
+    if (payload.kind === "base") {
+      if (!dish.base) return "這道菜不用麵";
+      if (sl.base) return "碗裡已經有麵了";
+      if (payload.id !== dish.base) return "不是這碗的麵";
+      return null;
+    }
+    const id = payload.id;
+    if (payload.from === "fridge" && D.ING[id].station) return "先拿到" + D.STATIONS[D.ING[id].station].zh + "處理";
+    if (!dish.items.includes(id)) return id === "egg" ? "這碗沒有溏心蛋！" : "這道菜不加這個";
+    if (dish.base && !sl.base) return "先放麵條";
+    if (sl.have.includes(id)) return "已經加過了";
+    if (dish.ordered && dish.items[sl.have.length] !== id) return "順序不對喔";
+    return null;
+  }
+
+  function apply(i, payload) {
+    const sl = S.slots[i];
+    if (payload.kind === "base") sl.base = payload.id;
+    else sl.have.push(payload.id);
+  }
+
+  function complete(sl) {
+    if (!sl.order) return false;
+    const d = sl.order.dish;
+    if (d.base && !sl.base) return false;
+    return d.items.every(x => sl.have.includes(x));
+  }
+
+  function wrong(i, msg) {
+    S.mistakes++;
+    S.combo = 0;
+    const o = S.slots[i] && S.slots[i].order;
+    if (o) o.mist++;
+    if (S.phase > 0) S.score = Math.max(0, S.score - 5);
+    return { ok: false, msg };
+  }
+
+  // 放到出餐格
+  function dropOnSlot(i, payload) {
+    S.taps++;
+    const why = check(i, payload);
+    if (why) return wrong(i, why);
+    apply(i, payload);
+    return { ok: true, msg: complete(S.slots[i]) ? "可以出餐了！" : "" };
+  }
+
+  // 點一下：自動找能放的地方
+  function tapAdd(payload) {
+    S.taps++;
+    const n = slotsFor(S.phase);
+    if (payload.from === "fridge" && D.ING[payload.id] && D.ING[payload.id].station) {
+      const k = stationOpenFor(payload.id);
+      if (k) return { ok: true, msg: "", cook: k };
+      return wrong(0, "爐台滿了或還沒開");
+    }
+    let first = null;
+    for (let i = 0; i < n; i++) {
+      const why = check(i, payload);
+      if (!why) { apply(i, payload); return { ok: true, msg: complete(S.slots[i]) ? "可以出餐了！" : "", slot: i }; }
+      if (first === null) first = why;
+    }
+    return wrong(0, first || "沒有合適的客人");
+  }
+
+  // 把生食材放上爐台
+  function cookAt(key, id) {
+    S.taps++;
+    if (!stationUnlocked(key)) return { ok: false, msg: "還沒開放" };
+    if (!D.STATIONS[key].accepts.includes(id)) return wrong(0, "這台爐不做這個");
+    if (S.stations[key].length >= 2) return { ok: false, msg: "爐台滿了，等一下" };
+    S.stations[key].push({ id, start: S.t, ready: false, readyAt: 0 });
+    return { ok: true, msg: "" };
+  }
+
+  function serve(i) {
+    const sl = S.slots[i];
+    if (!complete(sl)) return null;
+    const o = sl.order;
+    const perfect = o.mist === 0;
+    const speed = Math.round(40 * Math.max(0, o.left) / o.limit);
+    let pts = 100 + speed;
+    if (perfect) { S.combo++; pts += 30 + 10 * Math.min(S.combo, 5); }
+    else S.combo = 0;
+    S.bestCombo = Math.max(S.bestCombo, S.combo);
+    if (o.vip) pts *= 2;
+    S.score += pts;
+    S.revenue += o.dish.price * (o.vip ? 2 : 1);
+    S.served++;
+    S.slots[i] = emptySlot();
+    S.nextAt[i] = S.t + 0.9;
+    return { pts, perfect, vip: o.vip };
+  }
+
+  function fail(i) {
+    S.missed++;
+    S.combo = 0;
+    S.slots[i] = emptySlot();
+    S.nextAt[i] = S.t + 1.2;
+  }
+
+  // 每一幀更新：回傳事件讓介面顯示提示
+  function tick(dt) {
+    const events = [];
+    if (!S.running) return events;
+    S.t += dt;
+    const ph = phaseAt(S.t);
+    if (ph !== S.phase) { S.phase = ph; events.push({ type: "phase", ph }); }
+
+    // 爐台：做好、燒焦
+    Object.keys(S.stations).forEach(k => {
+      const st = D.STATIONS[k];
+      S.stations[k] = S.stations[k].filter(it => {
+        if (!it.ready && S.t >= it.start + st.time) { it.ready = true; it.readyAt = S.t; events.push({ type: "ready", id: it.id }); }
+        if (it.ready && S.t >= it.readyAt + burnTime()) {
+          events.push({ type: "burn", id: it.id });
+          if (S.phase > 0) S.score = Math.max(0, S.score - 5);
+          return false;
+        }
+        return true;
+      });
+    });
+
+    // 客人等待
+    const n = slotsFor(S.phase);
+    for (let i = 0; i < n; i++) {
+      const sl = S.slots[i];
+      if (!sl.order) continue;
+      sl.order.left -= dt;
+      if (sl.order.left <= 0) { fail(i); events.push({ type: "fail", i }); }
+    }
+
+    // 催單事件
+    if (S.phase >= 1 && S.t >= S.nextEvent) {
+      S.nextEvent = S.t + 24 + Math.random() * 10;
+      const act = [];
+      for (let i = 0; i < n; i++) if (S.slots[i].order) act.push(i);
+      if (act.length) {
+        const i = act[Math.floor(Math.random() * act.length)];
+        S.slots[i].order.left -= 12;
+        events.push({ type: "rush", i });
+      }
+    }
+
+    fill();
+    if (S.t >= TOTAL) { S.running = false; events.push({ type: "end" }); }
+    return events;
+  }
+
+  function hint() {
+    const n = slotsFor(S.phase);
+    for (let i = 0; i < n; i++) {
+      const sl = S.slots[i];
+      if (!sl.order) continue;
+      const d = sl.order.dish;
+      if (d.base && !sl.base) return "先把「" + D.BASES[d.base].zh + "」拖到碗裡";
+      let miss;
+      if (d.ordered) miss = d.items[sl.have.length];
+      else miss = d.items.find(x => !sl.have.includes(x));
+      if (!miss) return "按「出餐」送出";
+      const st = stationFor(miss);
+      if (st) return "把「" + D.ING[miss].zh + "」放到" + D.STATIONS[st].zh + "，做好再拖過來";
+      return "從冰箱拿「" + D.ING[miss].zh + "」放到" + (d.cat === "noodle" ? "碗" : d.cat === "soup" ? "湯碗" : d.cat === "dessert" ? "杯子" : "盤子") + "裡";
+    }
+    return "等客人入座…";
+  }
+
+  function rank(score) { return score >= 1500 ? 3 : score >= 900 ? 2 : score >= 400 ? 1 : 0; }
+  function getBest() { try { return +localStorage.getItem(BEST_KEY) || 0; } catch (e) { return 0; } }
+  function setBest(v) { try { localStorage.setItem(BEST_KEY, String(v)); } catch (e) { } }
+
+  window.LOGIC = {
+    resetGame, tick, check, dropOnSlot, tapAdd, cookAt, serve, hint,
+    complete, stationUnlocked, stationOpenFor, rank, getBest, setBest,
+    slotsFor, stationFor, eligible
+  };
+})();
+</script>
+<script>
+// 介面：畫面切換、拖曳與點擊、音效與動畫迴圈
+(function () {
+  const D = window.DATA, A = window.ART, L = window.LOGIC, S = window.S, TOTAL = window.GAME_TOTAL;
+  const app = document.getElementById("app");
+  const RANKS = ["洗碗小幫手", "實習廚師", "二廚", "主廚認證"];
+  let raf = 0, last = 0, activeTab = "main", audio = null, pend = null, ghost = null, groupOf = {};
+
+  // 每個食材屬於哪一個冰箱分頁（第一次出現的菜色決定）
+  const TAB_FOR_CAT = { noodle: "main", side: "side", soup: "soup", dessert: "dessert" };
+  D.DISHES.forEach(d => d.items.forEach(id => { if (!(id in groupOf)) groupOf[id] = TAB_FOR_CAT[d.cat]; }));
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+  function mmss(sec) { const s = Math.ceil(sec), m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
+
+  // 音效（需要點擊後才會播）
+  function tone(f, dur, type, vol, delay) {
+    if (!audio) return;
+    const t = audio.currentTime + (delay || 0), o = audio.createOscillator(), g = audio.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(audio.destination); o.start(t); o.stop(t + dur);
+  }
+  const sfx = {
+    tap: () => tone(660, 0.07, "triangle", 0.12),
+    ding: () => { tone(1318, 0.5, "sine", 0.25); tone(1760, 0.6, "sine", 0.18, 0.09); },
+    buzz: () => tone(150, 0.18, "square", 0.07),
+    ready: () => tone(988, 0.2, "sine", 0.15),
+    end: () => [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.4, "sine", 0.18, i * 0.12))
+  };
+
+  function toast(text, ok) {
+    const t = document.getElementById("toast");
+    if (!t) return;
+    t.textContent = text;
+    t.className = "toast show" + (ok ? " ok" : "");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { t.className = "toast"; }, 1300);
+  }
+
+  // ---------- 開始畫面 ----------
+  function startScreen() {
+    cancelAnimationFrame(raf);
+    const best = L.getBest();
+    app.innerHTML = `<div class="intro">
+      <div class="brand">久時拌麵</div>
+      <h1>拌麵出餐挑戰</h1>
+      <p>三分鐘一班，客人一張一張來。照單把麵、小菜和湯做好，出餐越快、越準，分數越高。</p>
+      <ol class="howto">
+        <li><b>1</b><span>從「麵櫃」拖一種麵到碗上，點一下也可以</span></li>
+        <li><b>2</b><span>從「冰箱」拿料；要炒、要烤的先放到爐台，做好再拖過來</span></li>
+        <li><b>3</b><span>料都到齊，按「出餐」送出</span></li>
+      </ol>
+      <button class="primary" id="go">開　始</button>
+      <div class="best">${best ? "最高分 " + best.toLocaleString() : ""}</div>
+    </div>`;
+    document.getElementById("go").onclick = startGame;
+  }
+
+  // ---------- 遊戲畫面 ----------
+  function startGame() {
+    try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.resume) audio.resume(); } catch (e) { audio = null; }
+    L.resetGame();
+    activeTab = "main";
+    app.innerHTML = `
+      <div class="hud">
+        <div><div class="lbl">分數</div><div class="val" id="hs">0</div></div>
+        <div class="clock" id="hc"><div class="lbl">剩餘時間</div><div class="val" id="ht">3:00</div></div>
+        <div class="r"><div class="lbl">營業額</div><div class="val" id="hr">$0</div></div>
+      </div>
+      <div class="stagebar"><span id="stage"></span><span class="combo" id="combo"></span></div>
+      <div class="tip" id="tip"></div>
+      <div class="pass" id="pass"></div>
+      <div class="kitchen">
+        <div class="row-title"><span>爐台</span><span>生食材拖上去，做好再拿</span></div>
+        <div class="stations" id="stations"></div>
+        <div class="row-title"><span>麵櫃</span><span>拖到碗上</span></div>
+        <div class="noodles" id="noodles"></div>
+        <div class="row-title"><span>冰箱</span></div>
+        <div class="tabs" id="tabs"></div>
+        <div class="fridge" id="fridge"></div>
+      </div>
+      <div class="toast" id="toast"></div>`;
+    document.getElementById("noodles").innerHTML = Object.keys(D.BASES).map(k =>
+      `<div class="pack" data-src='${JSON.stringify({ kind: "base", id: k })}'>${A.packSVG(k)}<span>${esc(D.BASES[k].zh)}</span></div>`
+    ).join("");
+    renderAll();
+    last = performance.now();
+    raf = requestAnimationFrame(loop);
+  }
+
+  function renderAll() {
+    renderHUD();
+    renderPass();
+    renderStations();
+    renderTabs();
+    renderFridge();
+    document.getElementById("tip").textContent = L.hint();
+  }
+
+  function renderHUD() {
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set("hs", S.score.toLocaleString());
+    set("hr", "$" + S.revenue.toLocaleString());
+    set("stage", D.PHASES[S.phase].label.zh);
+    set("combo", S.combo >= 2 ? "連續完美 ×" + S.combo : "");
+    const hc = document.getElementById("hc");
+    if (hc) hc.classList.toggle("low", TOTAL - S.t <= 20);
+  }
+
+  function renderPass() {
+    const pass = document.getElementById("pass");
+    const n = L.slotsFor(S.phase);
+    pass.className = "pass" + (n === 1 ? " one" : "");
+    let html = "";
+    for (let i = 0; i < n; i++) html += slotHTML(i);
+    pass.innerHTML = html;
+  }
+
+  function slotHTML(i) {
+    const sl = S.slots[i];
+    if (!sl.order) {
+      return `<div class="slot empty" data-drop="slot:${i}">
+        <div class="ticket"><span>桌 ${i + 1}</span><span></span></div>
+        <div class="name">下一位客人準備中</div>
+        <div style="flex:1;display:grid;place-items:center;color:var(--soft);font-size:12px;min-height:120px">等待入座</div>
+      </div>`;
+    }
+    const o = sl.order, d = o.dish, done = L.complete(sl);
+    const broth = d.cat === "soup" ? (d.items[0] === "broth1" ? "#dcaa4a" : "#efe3b5") : null;
+    const chips = [];
+    if (d.base) chips.push({ label: D.BASES[d.base].zh, ok: !!sl.base });
+    d.items.forEach(x => chips.push({ label: D.ING[x].zh, ok: sl.have.includes(x) }));
+    const showAll = o.first || S.phase === 0;
+    const chipHTML = chips.map(c => {
+      const txt = showAll || c.ok ? esc(c.label) : "？";
+      return `<span class="chip${c.ok ? " ok" : ""}">${txt}</span>`;
+    }).join("");
+    return `<div class="slot${done ? " ready" : ""}" data-drop="slot:${i}">
+      <div class="ticket"><span>桌 ${i + 1}${o.vip ? '<span class="vip">VIP ×2</span>' : ""}</span><span>$${d.price}</span></div>
+      <div class="name">${d.no ? d.no + " " : ""}${esc(d.zh)}</div>
+      <div class="recipe">${chipHTML}</div>
+      ${A.dishSVG(d, sl.have, sl.base, broth)}
+      <div class="bar${o.left / o.limit < 0.3 ? " warn" : ""}"><i data-bar="slot${i}"></i></div>
+      <button class="serve" data-serve="${i}" ${done ? "" : "disabled"}>${done ? "出　餐" : "還沒齊"}</button>
+    </div>`;
+  }
+
+  function renderStations() {
+    const box = document.getElementById("stations");
+    box.innerHTML = Object.keys(D.STATIONS).map(k => {
+      const st = D.STATIONS[k], open = L.stationUnlocked(k);
+      const burners = [0, 1].map(j => {
+        const it = S.stations[k][j];
+        if (!it) return `<div class="burner"></div>`;
+        const ic = A.icon(it.id, 32);
+        if (it.ready) {
+          const src = esc(JSON.stringify({ kind: "ing", id: it.id, from: "station", station: k, idx: j }));
+          return `<div class="burner ready" data-src='${src}'>${ic}</div>`;
+        }
+        return `<div class="burner on">${ic}<div class="prog"><i data-bar="st${k}${j}"></i></div></div>`;
+      }).join("");
+      return `<div class="station${open ? "" : " locked"}" data-drop="station:${k}">
+        <div class="sname">${st.zh}${open ? "" : "（未開放）"}</div>
+        <div class="burners">${burners}</div>
+      </div>`;
+    }).join("");
+    // 站名前加上小圖示
+    box.querySelectorAll(".sname").forEach((el, idx) => {
+      const k = Object.keys(D.STATIONS)[idx];
+      el.insertAdjacentHTML("beforebegin", A.icon(D.STATIONS[k].icon, 26));
+    });
+  }
+
+  function renderTabs() {
+    const tabs = document.getElementById("tabs");
+    const needed = new Set();
+    const n = L.slotsFor(S.phase);
+    for (let i = 0; i < n; i++) {
+      const sl = S.slots[i];
+      if (!sl.order) continue;
+      sl.order.dish.items.forEach(x => { if (!sl.have.includes(x)) needed.add(groupOf[x]); });
+    }
+    tabs.innerHTML = D.TABS.map(t => {
+      const open = S.phase >= t.phase;
+      const cls = ["tab", open ? "" : "locked", open && needed.has(t.key) ? "need" : ""].join(" ");
+      return `<button class="${cls}" data-tab="${t.key}" aria-pressed="${activeTab === t.key}" ${open ? "" : "disabled"}>${t.zh}</button>`;
+    }).join("");
+  }
+
+  function renderFridge() {
+    const box = document.getElementById("fridge");
+    const ids = Object.keys(D.ING).filter(id => groupOf[id] === activeTab);
+    box.innerHTML = ids.map(id => {
+      const ing = D.ING[id];
+      const src = esc(JSON.stringify({ kind: "ing", id, from: "fridge" }));
+      return `<div class="ing" data-src='${src}'>${A.icon(id, 30)}<span>${esc(ing.zh)}</span>${ing.station ? '<span class="tag">' + D.STATIONS[ing.station].zh + "</span>" : ""}</div>`;
+    }).join("");
+  }
+
+  // 每一幀只更新進度條，不重畫整個畫面
+  function updateFrame() {
+    const ht = document.getElementById("ht");
+    if (ht) ht.textContent = mmss(Math.max(0, TOTAL - S.t));
+    const n = L.slotsFor(S.phase);
+    for (let i = 0; i < n; i++) {
+      const o = S.slots[i].order;
+      const el = document.querySelector(`[data-bar="slot${i}"]`);
+      if (o && el) el.style.width = Math.max(0, (o.left / o.limit) * 100) + "%";
+    }
+    Object.keys(S.stations).forEach(k => {
+      S.stations[k].forEach((it, j) => {
+        if (it.ready) return;
+        const el = document.querySelector(`[data-bar="st${k}${j}"]`);
+        if (el) el.style.width = Math.min(100, ((S.t - it.start) / D.STATIONS[k].time) * 100) + "%";
+      });
+    });
+  }
+
+  function loop(now) {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    const events = L.tick(dt);
+    let finished = false;
+    events.forEach(ev => {
+      if (ev.type === "phase") { toast(D.PHASES[ev.ph].label.zh, true); sfx.ding(); }
+      if (ev.type === "ready") sfx.ready();
+      if (ev.type === "burn") toast("爐火太久，焦了！");
+      if (ev.type === "fail") { toast("客人等太久走了"); sfx.buzz(); }
+      if (ev.type === "rush") toast("客人催單！");
+      if (ev.type === "end") finished = true;
+    });
+    if (finished) return endGame();
+    if (events.length) renderAll();
+    updateFrame();
+    raf = requestAnimationFrame(loop);
+  }
+
+  // ---------- 拖曳與點擊 ----------
+  function startDrag(p) {
+    ghost = document.createElement("div");
+    ghost.className = "ghost";
+    const label = p.kind === "base" ? D.BASES[p.id].zh : D.ING[p.id].zh;
+    const art = p.kind === "base" ? A.packSVG(p.id).replace('width="40"', 'width="52"') : A.icon(p.id, 52);
+    ghost.innerHTML = art + `<span>${esc(label)}</span>`;
+    document.body.appendChild(ghost);
+  }
+
+  function moveGhost(x, y) {
+    if (!ghost) return;
+    ghost.style.left = x + "px";
+    ghost.style.top = y + "px";
+  }
+
+  function targetAt(x, y) {
+    const el = document.elementFromPoint(x, y);
+    const t = el && el.closest("[data-drop]");
+    document.querySelectorAll(".over").forEach(n => { if (n !== t) n.classList.remove("over"); });
+    if (t) t.classList.add("over");
+    return t ? t.dataset.drop : null;
+  }
+
+  function endDrag() {
+    if (ghost) ghost.remove();
+    ghost = null;
+    document.querySelectorAll(".over").forEach(n => n.classList.remove("over"));
+  }
+
+  function normalize(p) {
+    return p.kind === "base" ? { kind: "base", id: p.id } : { kind: "ing", id: p.id, from: p.from };
+  }
+
+  function takeFromStation(p) {
+    const arr = S.stations[p.station];
+    const idx = arr.findIndex(x => x.id === p.id && x.ready);
+    if (idx >= 0) arr.splice(idx, 1);
+  }
+
+  function handleDrop(p, target) {
+    const [kind, key] = target.split(":");
+    if (kind === "slot") {
+      const i = +key;
+      const r = L.dropOnSlot(i, normalize(p));
+      if (r.ok) {
+        if (p.from === "station") takeFromStation(p);
+        sfx.tap();
+        if (r.msg) toast(r.msg, true);
+        if (L.complete(S.slots[i])) sfx.ready();
+      } else {
+        sfx.buzz();
+        toast(r.msg);
+      }
+      renderAll();
+      if (!r.ok) { const el = document.querySelectorAll("#pass .slot")[i]; if (el) el.classList.add("shake"); }
+      return;
+    }
+    if (kind === "station") {
+      if (p.kind === "base") { toast("麵要拖到碗上，不是爐台"); return; }
+      if (p.from === "station") { toast("這個已經在爐台上了"); return; }
+      const r = L.cookAt(key, p.id);
+      if (r.ok) { sfx.tap(); } else { sfx.buzz(); toast(r.msg); }
+      renderAll();
+    }
+  }
+
+  function handleTap(p) {
+    let r;
+    if (p.kind === "base") {
+      r = L.tapAdd({ kind: "base", id: p.id });
+    } else if (p.from === "fridge" && D.ING[p.id].station) {
+      const k = L.stationOpenFor(p.id);
+      if (!k) { toast("爐台都滿了或還沒開放"); return; }
+      r = L.cookAt(k, p.id);
+    } else {
+      r = L.tapAdd({ kind: "ing", id: p.id, from: p.from });
+      if (r.ok && p.from === "station") takeFromStation(p);
+    }
+    if (r.ok) { sfx.tap(); if (r.msg) toast(r.msg, true); }
+    else { sfx.buzz(); toast(r.msg); }
+    renderAll();
+  }
+
+  document.addEventListener("pointerdown", e => {
+    const el = e.target.closest("[data-src]");
+    if (!el || !S.running) return;
+    pend = { p: JSON.parse(el.dataset.src), x: e.clientX, y: e.clientY, dragging: false };
+  });
+  window.addEventListener("pointermove", e => {
+    if (!pend) return;
+    if (!pend.dragging) {
+      if (Math.hypot(e.clientX - pend.x, e.clientY - pend.y) < 8) return;
+      pend.dragging = true;
+      startDrag(pend.p);
+    }
+    moveGhost(e.clientX, e.clientY);
+    targetAt(e.clientX, e.clientY);
+  });
+  window.addEventListener("pointerup", e => {
+    if (!pend) return;
+    const p = pend.p, wasDrag = pend.dragging;
+    pend = null;
+    if (wasDrag) {
+      const t = targetAt(e.clientX, e.clientY);
+      endDrag();
+      if (t) handleDrop(p, t);
+    } else {
+      handleTap(p);
+    }
+  });
+  window.addEventListener("pointercancel", () => { pend = null; endDrag(); });
+
+  document.addEventListener("click", e => {
+    const serveBtn = e.target.closest("[data-serve]");
+    if (serveBtn && !serveBtn.disabled) {
+      const i = +serveBtn.dataset.serve;
+      const res = L.serve(i);
+      if (res) {
+        sfx.ding();
+        toast(res.perfect ? "完美出餐！" : "出餐！", true);
+        renderAll();
+        const pass = document.querySelectorAll("#pass .slot")[i];
+        if (pass) {
+          const f = document.createElement("div");
+          f.className = "float";
+          f.textContent = "+" + res.pts;
+          pass.appendChild(f);
+        }
+      }
+      return;
+    }
+    const tab = e.target.closest("[data-tab]");
+    if (tab && !tab.disabled) { activeTab = tab.dataset.tab; renderAll(); }
+  });
+
+  // ---------- 結算 ----------
+  function endGame() {
+    cancelAnimationFrame(raf);
+    endDrag();
+    sfx.end();
+    const s = S.score, rk = L.rank(s);
+    const prev = L.getBest(), isBest = s > prev && s > 0;
+    if (isBest) L.setBest(s);
+    const acc = S.taps ? Math.round(((S.taps - S.mistakes) / S.taps) * 100) : 0;
+    const star = on => `<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z" fill="${on ? "#c39638" : "none"}" stroke="${on ? "#c39638" : "#c3cbd8"}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+    app.innerHTML = `<div class="result">
+      <div class="stars">${[1, 2, 3].map(i => star(rk >= i)).join("")}</div>
+      <p class="rank">${RANKS[rk]}</p>
+      <div class="big">${s.toLocaleString()}</div>
+      ${isBest ? '<div class="newbest">新紀錄！</div>' : ""}
+      <div class="stats">
+        <div><b>${S.served}</b><span>出餐</span></div>
+        <div><b>${S.missed}</b><span>客人走掉</span></div>
+        <div><b>${acc}%</b><span>準確率</span></div>
+      </div>
+      <p style="margin:0;color:var(--soft);font-size:13px;line-height:1.6;max-width:320px">這一班你替久時賺進 $${S.revenue.toLocaleString()}，最高連續完美 ×${S.bestCombo}。</p>
+      <button class="primary" id="again">再玩一次</button>
+      <button class="ghostbtn" id="home">回首頁</button>
+    </div>`;
+    document.getElementById("again").onclick = startGame;
+    document.getElementById("home").onclick = startScreen;
+  }
+
+  startScreen();
+})();
+</script>
+</body></html>
