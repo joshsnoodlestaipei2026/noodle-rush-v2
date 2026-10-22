@@ -3,22 +3,24 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>拌麵出餐挑戰 v2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Silkscreen:wght@400;700&display=swap">
 <style>
 :root{
   --paper:#eef0ec; --card:#fbfbf8; --ink:#22304a; --soft:#5f6b80; --line:#c3cbd8;
   --brand:#405880; --deep:#2b3d60; --steel:#d9dee6; --steel-2:#c4ccd7;
   --good:#4d7a52; --bad:#b4523c; --gold:#c39638;
-  --serif:"Noto Serif TC","Songti TC","PMingLiu",serif;
+  --serif:"Silkscreen","Noto Serif TC","Songti TC","PMingLiu",serif;
+  --pix:"Silkscreen","Noto Sans TC",monospace;
   --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+svg{image-rendering:pixelated}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-#app{height:100vh;height:100dvh;max-width:460px;margin:0 auto;display:flex;flex-direction:column;padding-block:8px;padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));gap:8px}
+#app{height:100vh;height:calc(var(--vh,1vh)*100);max-width:460px;margin:0 auto;display:flex;flex-direction:column;padding-block:8px;padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));gap:8px}
 
 /* 開始畫面 */
 .intro{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:12px}
@@ -28,8 +30,8 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .howto{list-style:none;padding:0;margin:4px 0 0;display:grid;gap:8px;text-align:left;font-size:14px;max-width:320px;width:100%}
 .howto li{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
 .howto b{width:24px;height:24px;flex:none;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:12px}
-.primary{background:var(--brand);color:#fff;font-family:var(--serif);font-weight:700;font-size:20px;letter-spacing:.3em;padding:14px 0;width:min(100%,300px);border-radius:14px;box-shadow:0 4px 0 var(--deep)}
-.primary:active{transform:translateY(3px);box-shadow:0 1px 0 var(--deep)}
+.primary{background:var(--brand);color:#fff;font-family:var(--serif);font-weight:700;font-size:20px;letter-spacing:.3em;padding:14px 0;width:min(100%,300px);border-radius:0;border:2px solid var(--deep);box-shadow:4px 4px 0 var(--deep)}
+.primary:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--deep)}
 .seg{display:inline-flex;border:1.5px solid var(--brand);border-radius:999px;overflow:hidden}
 .seg button{padding:6px 14px;font-size:13px;color:var(--brand)}
 .seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
@@ -38,22 +40,22 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 /* HUD */
 .hud{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:end;font-variant-numeric:tabular-nums;padding:0 4px}
 .hud .lbl{font-size:10.5px;letter-spacing:.14em;color:var(--soft)}
-.hud .val{font-family:var(--serif);font-weight:700;font-size:20px;color:var(--deep);line-height:1.1}
+.hud .val{font-family:var(--pix);font-weight:700;font-size:20px;color:var(--deep);line-height:1.1}
 .hud .r{text-align:right}
 .hud .clock.low .val{color:var(--bad)}
 .stagebar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--soft);padding:0 4px;min-height:18px}
 .stagebar .combo{color:var(--gold);font-weight:700}
-.tip{background:var(--card);border:1px dashed var(--brand);border-radius:10px;padding:7px 10px;font-size:13px;color:var(--deep);text-align:center;min-height:34px;display:flex;align-items:center;justify-content:center}
+.tip{background:var(--card);border:2px dashed var(--brand);border-radius:0;padding:7px 10px;font-size:13px;color:var(--deep);text-align:center;min-height:34px;display:flex;align-items:center;justify-content:center}
 
 /* 出餐台 */
 .pass{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
 .pass.one{grid-template-columns:1fr}
 .pass.one .slot{max-width:none}
-.slot{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 6px 8px;display:flex;flex-direction:column;align-items:stretch;min-width:0;transition:border-color .2s,box-shadow .2s}
+.slot{position:relative;background:var(--card);border:2px solid var(--deep);border-radius:0;box-shadow:4px 4px 0 rgba(43,61,96,.35);padding:6px 6px 8px;display:flex;flex-direction:column;align-items:stretch;min-width:0;transition:border-color .2s,box-shadow .2s}
 .slot.over{border-color:var(--brand);box-shadow:0 0 0 3px rgba(64,88,128,.18)}
 .slot.empty{opacity:.55;border-style:dashed}
 .slot.ready{border-color:var(--good);box-shadow:0 0 0 3px rgba(77,122,82,.2)}
-.slot svg.dish{width:100%;height:auto;display:block;max-height:128px;margin:0 auto}
+.slot svg.dish{width:100%;height:auto;display:block;max-height:30vh;margin:0 auto}
 .slot .ticket{font-size:12px;color:var(--soft);display:flex;justify-content:space-between;gap:6px;padding:0 2px}
 .slot .name{font-family:var(--serif);font-weight:700;font-size:14px;color:var(--ink);line-height:1.3;padding:2px 2px 0;min-height:36px}
 .slot .vip{color:#fff;background:var(--gold);border-radius:4px;padding:0 5px;font-size:11px;margin-left:4px}
@@ -76,10 +78,10 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 @keyframes rise{to{transform:translate(-50%,-50px);opacity:0}}
 
 /* 廚房區 */
-.kitchen{flex:1;min-height:0;display:flex;flex-direction:column;gap:6px;overflow-y:auto;background:linear-gradient(#dfe4eb,#cfd6e0);border-radius:16px;padding:8px;border:1px solid var(--steel-2)}
+.kitchen{flex:none;min-height:0;display:flex;flex-direction:column;gap:6px;overflow-y:auto;background:linear-gradient(#dfe4eb,#cfd6e0);border-radius:0;padding:8px;border:2px solid var(--deep)}
 .row-title{font-size:11px;letter-spacing:.14em;color:var(--soft);display:flex;justify-content:space-between;align-items:center}
 .stations{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.station{background:linear-gradient(#e9edf3,#d6dce5);border:1px solid var(--steel-2);border-radius:12px;padding:5px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.06)}
+.station{background:linear-gradient(#e9edf3,#d6dce5);border:2px solid #8e99aa;border-radius:0;padding:5px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.06)}
 .station.locked{opacity:.4}
 .station.over{border-color:var(--brand);box-shadow:0 0 0 3px rgba(64,88,128,.2)}
 .station .sname{font-size:12px;color:var(--deep);font-weight:700}
@@ -91,17 +93,17 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .burner .prog{position:absolute;left:4px;right:4px;bottom:-7px;height:4px;border-radius:4px;background:var(--steel);overflow:hidden}
 .burner .prog i{display:block;height:100%;background:var(--brand)}
 .noodles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.pack{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:4px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
+.pack{background:var(--card);border:2px solid #8e99aa;border-radius:0;box-shadow:2px 2px 0 rgba(43,61,96,.25);padding:4px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
 .pack svg{width:38px;height:38px;pointer-events:none}
 .pack span{font-size:10px;line-height:1.2;text-align:center;color:var(--ink)}
 .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--brand);color:var(--brand);background:transparent;position:relative}
+.tab{flex:none;font-size:12px;padding:4px 10px;border-radius:0;border:1px solid var(--brand);color:var(--brand);background:transparent;position:relative}
 .tab[aria-pressed="true"]{background:var(--brand);color:#fff}
 .tab.need::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--gold);border:1.5px solid #fff}
 .tab.locked{opacity:.35}
 .fridge{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;align-content:start;flex:1;min-height:0;overflow-y:auto}
-.ing{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:3px 1px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
+.ing{background:var(--card);border:2px solid #8e99aa;border-radius:0;box-shadow:2px 2px 0 rgba(43,61,96,.2);padding:3px 1px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
 .ing svg{width:26px;height:26px;pointer-events:none}
 .ing span{font-size:9.5px;line-height:1.15;text-align:center;word-break:break-all}
 .ing.dim{opacity:.4}
@@ -112,7 +114,7 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .ghost{position:fixed;left:0;top:0;pointer-events:none;z-index:50;transform:translate(-50%,-70%);opacity:.95;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25))}
 .ghost svg{width:52px;height:52px;display:block}
 .ghost span{display:block;font-size:11px;background:var(--deep);color:#fff;border-radius:6px;padding:1px 6px;margin-top:2px;white-space:nowrap;text-align:center}
-.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:#fff;font-size:14px;padding:8px 14px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:#fff;font-size:14px;padding:8px 14px;border-radius:0;border:2px solid #fff;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1}
 .toast.ok{background:var(--good)}
 .ing,.pack,.burner,.tab,.station{-webkit-touch-callout:none}
@@ -122,10 +124,10 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .stars{display:flex;gap:6px}
 .stars svg{width:36px;height:36px}
 .rank{font-family:var(--serif);font-weight:900;font-size:30px;color:var(--deep);letter-spacing:.08em;margin:0}
-.big{font-family:var(--serif);font-weight:900;font-size:52px;line-height:1;font-variant-numeric:tabular-nums}
+.big{font-family:var(--pix);font-weight:900;font-size:52px;line-height:1;font-variant-numeric:tabular-nums}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);width:100%;max-width:340px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
 .stats div+div{border-left:1px dotted var(--line)}
-.stats b{display:block;font-family:var(--serif);font-size:20px;font-variant-numeric:tabular-nums;color:var(--deep)}
+.stats b{display:block;font-family:var(--pix);font-size:20px;font-variant-numeric:tabular-nums;color:var(--deep)}
 .stats span{font-size:11px;color:var(--soft)}
 .newbest{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.1em}
 .ghostbtn{font-size:13px;color:var(--brand);border:1px solid var(--brand);border-radius:999px;padding:6px 18px}
@@ -141,7 +143,7 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   .noodles{gap:4px}
   .pack{padding:2px 1px 3px}
   .pack span{font-size:9px}
-  .slot svg.dish{max-height:92px}
+  .slot svg.dish{max-height:20vh}
   .slot .name{min-height:0;font-size:13px}
   .slot .recipe{min-height:0}
   .serve{margin-top:4px;padding:6px 0;font-size:13px}
@@ -150,9 +152,24 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   .burner svg{width:26px;height:26px}
   .tip{min-height:26px;padding:4px 8px;font-size:12px}
   .hud .val{font-size:17px}
-  .kitchen{padding:6px;gap:4px}
+  .kitchen{padding:5px;gap:4px}
+  .station{min-height:58px}
   .pack svg{width:30px;height:30px}
   .ing svg{width:22px;height:22px}
+}
+
+/* 手機較高的螢幕：出餐台可以大一點 */
+@media (max-width:899px) and (min-height:800px){
+  .kitchen{flex:1;gap:10px;padding:10px}
+  .station{min-height:124px}
+  .burner{width:56px;height:56px}
+  .burner svg{width:40px;height:40px}
+  .ing svg{width:36px;height:36px}
+  .ing span{font-size:11px}
+  .pack svg{width:46px;height:46px}
+  .pack span{font-size:11px}
+  .tab{font-size:13px;padding:5px 12px}
+  .fridge{gap:6px}
 }
 
 /* 電腦版：左邊出餐台、右邊廚房，整個畫面不用捲動 */
@@ -224,23 +241,16 @@ window.IC={
 </script>
 <script>
 window.DATA = {
-  // 五款拌麵的麵體
+  // 五款拌麵的麵體（野菜雞絲拌麵改成青綠色麵）
   BASES: {
     camellia: { zh: "山茶花粗捲麵", en: "Camellia curly", color: "#e7b64a", wave: "curly" },
     squidink: { zh: "墨魚汁中直麵", en: "Squid ink straight", color: "#1d1d22", wave: "straight" },
     knife:    { zh: "刀削波浪麵", en: "Knife-cut wavy", color: "#ecc56a", wave: "ribbon" },
-    golden:   { zh: "澳洲黃金小麥", en: "Golden wheat", color: "#e2c26a", wave: "straight" },
+    golden:   { zh: "青汁小麥麵", en: "Green wheat", color: "#8fc24a", wave: "straight" },
     stone:    { zh: "石臼細扁麵", en: "Stone-mill flat", color: "#d6b06a", wave: "thin" }
   },
 
-  // 爐台：需要先把生食材拖上去，等它做好再拖到碗裡
-  STATIONS: {
-    wok:   { zh: "炒鍋", en: "Wok", icon: "wok", time: 3, phase: 0, accepts: ["wagyu", "squid", "kailan", "cauli", "pork", "tripe"] },
-    oven:  { zh: "蒸烤箱", en: "Combi oven", icon: "oven", time: 4, phase: 1, accepts: ["jowl", "duck", "chickenleg"] },
-    stove: { zh: "爐火", en: "Stove", icon: "stove", time: 4, phase: 2, accepts: ["broth1", "broth2"] }
-  },
-
-  // 食材：station 有值代表要先上爐台；icon 對應 IC 裡的圖
+  // 食材（已取消爐台：所有料都從冰箱直接拿）
   ING: {
     egg:        { zh: "溏心蛋", en: "Soft egg", icon: "egg" },
     kongxin:    { zh: "醋漬空心菜", en: "Pickled water spinach", icon: "kongxin" },
@@ -255,15 +265,16 @@ window.DATA = {
     chervil:    { zh: "山蘿蔔葉", en: "Chervil", icon: "chervil" },
     arugula:    { zh: "芝麻葉", en: "Arugula", icon: "arugula" },
     crispyRice: { zh: "炸鍋巴", en: "Crispy rice", icon: "crispyRice" },
-    wagyu:      { zh: "和牛臉頰", en: "Wagyu cheek", icon: "wagyu", station: "wok" },
-    squid:      { zh: "中卷", en: "Squid", icon: "squid", station: "wok" },
-    kailan:     { zh: "芥藍花", en: "Kailan", icon: "kailan", station: "wok" },
-    cauli:      { zh: "白花椰", en: "Cauliflower", icon: "cauli", station: "wok" },
-    pork:       { zh: "炒豬肉", en: "Stir-fried pork", icon: "duck", station: "wok" },
-    tripe:      { zh: "牛肚", en: "Beef tripe", icon: "woodear", station: "wok" },
-    duck:       { zh: "油封鴨腿絲", en: "Duck confit", icon: "duck", station: "oven" },
-    jowl:       { zh: "松阪豬", en: "Pork jowl", icon: "wagyu", station: "oven" },
-    chickenleg: { zh: "文昌雞腿", en: "Chicken leg", icon: "chicken", station: "oven" },
+    wagyu:      { zh: "和牛臉頰", en: "Wagyu cheek", icon: "wagyu" },
+    squid:      { zh: "中卷", en: "Squid", icon: "squid" },
+    kailan:     { zh: "芥藍花", en: "Kailan", icon: "kailan" },
+    cauli:      { zh: "白花椰", en: "Cauliflower", icon: "cauli" },
+    pork:       { zh: "炒豬肉", en: "Stir-fried pork", icon: "pork" },
+    tripe:      { zh: "牛肚", en: "Beef tripe", icon: "tripe" },
+    duck:       { zh: "油封鴨腿絲", en: "Duck confit", icon: "duck" },
+    jowl:       { zh: "松阪豬", en: "Pork jowl", icon: "jowl" },
+    chickenleg: { zh: "文昌雞腿", en: "Chicken leg", icon: "chickenleg" },
+    nostoc:     { zh: "雨來菇", en: "Nostoc", icon: "nostoc" },
     kombu:      { zh: "鹽昆布絲", en: "Shio kombu", icon: "kombu" },
     buckwheat:  { zh: "炸蕎麥", en: "Fried buckwheat", icon: "buckwheat" },
     gingerSoy:  { zh: "薑汁醬油", en: "Ginger soy", icon: "gingerSoy" },
@@ -274,26 +285,26 @@ window.DATA = {
     nuts:       { zh: "堅果碎", en: "Crushed nuts", icon: "nuts" },
     garlicSoy:  { zh: "蒜蓉醬油", en: "Garlic soy", icon: "garlicSoy" },
     lettuce:    { zh: "生菜", en: "Lettuce", icon: "lettuce" },
-    bamboo:     { zh: "筍片", en: "Bamboo shoots", icon: "chayote" },
+    bamboo:     { zh: "筍片", en: "Bamboo shoots", icon: "bamboo" },
     greenBean:  { zh: "四季豆絲", en: "Green beans", icon: "greenBean" },
-    broth1:     { zh: "酸白菜湯底", en: "Pickled cabbage broth", icon: "miso", station: "stove" },
-    broth2:     { zh: "干貝雞湯底", en: "Scallop chicken broth", icon: "sauce", station: "stove" },
+    broth1:     { zh: "酸白菜湯底", en: "Pickled cabbage broth", icon: "broth1" },
+    broth2:     { zh: "干貝雞湯底", en: "Scallop chicken broth", icon: "broth2" },
     tremella:   { zh: "銀耳雪燕", en: "Snow fungus", icon: "tremella" },
     puree:      { zh: "地瓜南瓜醬", en: "Yam purée", icon: "puree" },
     brownSugar: { zh: "黑糖", en: "Brown sugar", icon: "brownSugar" },
     nitroBall:  { zh: "氮氣球", en: "Nitro foam", icon: "nitroBall" }
   },
 
-  // 菜單：cat 決定容器與出現時機；ordered 代表甜品要照順序加
+  // 菜單：cat 決定容器與出現時機；pre 代表一入座就已經在盤子上的料；sauce 為碗裡的醬汁底色
   DISHES: [
     { id: "n1", cat: "noodle", no: "①", zh: "炙燒和牛臉頰拌麵", en: "Seared Wagyu Cheek Noodles", price: 380, base: "camellia", items: ["wagyu", "kailan", "egg", "kongxin"] },
     { id: "n2", cat: "noodle", no: "②", zh: "黑豉椒香墨魚麵", en: "Squid Ink Noodles", price: 290, base: "squidink", items: ["squid", "kailan", "egg", "woodear"] },
     { id: "n3", cat: "noodle", no: "③", zh: "蝦汁烏魚子刀削麵", en: "Knife-Cut Mullet Roe Noodles", price: 280, base: "knife", items: ["chayote", "cordyceps", "sorghum", "karasumi"] },
-    { id: "n4", cat: "noodle", no: "④", zh: "野菜雞絲拌麵", en: "Shredded Chicken Noodles", price: 280, base: "golden", items: ["cauli", "chicken", "garlicKoji", "barley", "egg", "chervil"] },
+    { id: "n4", cat: "noodle", no: "④", zh: "野菜雞絲拌麵", en: "Shredded Chicken Noodles", price: 280, base: "golden", sauce: "#d6eea0", items: ["cauli", "chicken", "garlicKoji", "barley", "egg", "chervil"] },
     { id: "n5", cat: "noodle", no: "⑤", zh: "油封鴨腿絲拌麵", en: "Duck Confit Noodles", price: 260, base: "stone", items: ["duck", "arugula", "egg", "crispyRice"] },
 
     { id: "s1", cat: "side", zh: "昆布漬黃瓜", en: "Kombu Cucumber", price: 40, items: ["kombu"] },
-    { id: "s2", cat: "side", zh: "川麻雨來菇", en: "Mala Nostoc", price: 60, items: ["buckwheat"] },
+    { id: "s2", cat: "side", zh: "川麻雨來菇", en: "Mala Nostoc", price: 60, pre: ["nostoc"], items: ["nostoc", "buckwheat"] },
     { id: "s3", cat: "side", zh: "薑汁番茄", en: "Ginger Tomato", price: 60, items: ["gingerSoy", "sugar"] },
     { id: "s4", cat: "side", zh: "豆香味噌秋葵", en: "Miso Okra", price: 60, items: ["miso"] },
     { id: "s5", cat: "side", zh: "紅麴高麗菜乾", en: "Red Koji Cabbage", price: 60, items: ["sesame"] },
@@ -306,31 +317,35 @@ window.DATA = {
     { id: "p1", cat: "soup", zh: "酸白菜蔬菜湯", en: "Pickled Cabbage Soup", price: 80, items: ["broth1", "greenBean"] },
     { id: "p2", cat: "soup", zh: "干貝燉雞湯", en: "Scallop Chicken Soup", price: 200, items: ["broth2", "cordyceps"] },
 
-    { id: "d1", cat: "dessert", zh: "主廚甜品", en: "Chef's Dessert", price: 90, items: ["tremella", "puree", "brownSugar", "nitroBall"], ordered: true }
+    { id: "d1", cat: "dessert", zh: "主廚甜品", en: "Chef's Dessert", price: 90, items: ["tremella", "puree", "brownSugar", "nitroBall"] }
   ],
 
-  // 每段時間解鎖的內容
+  // 每段時間解鎖的內容：一開始只有一位客人，之後才變兩位
   PHASES: [
-    { until: 50, slots: 1, label: { zh: "第一段：拌麵", en: "Stage 1: Noodles" } },
-    { until: 110, slots: 2, label: { zh: "第二段：小菜上場", en: "Stage 2: Sides" } },
+    { until: 60, slots: 1, label: { zh: "第一段：拌麵", en: "Stage 1: Noodles" } },
+    { until: 120, slots: 2, label: { zh: "第二段：小菜上場", en: "Stage 2: Sides" } },
     { until: 180, slots: 2, label: { zh: "第三段：湯與甜品", en: "Stage 3: Soups & dessert" } }
   ],
 
-  // 冰箱分頁：每個食材歸到哪一頁，以及哪個階段開放
+  // 冰箱分頁：每頁約 6～7 格；ids 為該頁食材
   TABS: [
-    { key: "main", zh: "麵與主料", en: "Noodles", phase: 0 },
-    { key: "side", zh: "小菜", en: "Sides", phase: 1 },
-    { key: "soup", zh: "湯", en: "Soups", phase: 2 },
-    { key: "dessert", zh: "甜品", en: "Dessert", phase: 2 }
+    { key: "m1", zh: "麵・蛋菜", phase: 0, ids: ["egg", "kongxin", "woodear", "chayote", "cordyceps", "sorghum", "crispyRice"] },
+    { key: "m2", zh: "麵・配料", phase: 0, ids: ["karasumi", "chicken", "garlicKoji", "barley", "chervil", "arugula"] },
+    { key: "m3", zh: "炙燒・油封", phase: 0, ids: ["wagyu", "squid", "kailan", "cauli", "duck"] },
+    { key: "s1", zh: "小菜", phase: 1, ids: ["kombu", "buckwheat", "gingerSoy", "sugar", "miso", "sesame"] },
+    { key: "s2", zh: "小菜②", phase: 1, ids: ["sauce", "nuts", "garlicSoy", "lettuce", "bamboo"] },
+    { key: "s3", zh: "炒・烤肉", phase: 1, ids: ["pork", "tripe", "jowl", "chickenleg"] },
+    { key: "soup", zh: "湯", phase: 2, ids: ["broth1", "broth2", "greenBean"] },
+    { key: "dessert", zh: "甜品", phase: 2, ids: ["tremella", "puree", "brownSugar", "nitroBall"] }
   ]
 };
 </script>
 <script>
-// 畫面繪製：食材圖示、容器（碗／盤／玻璃杯）與麵條
+// 像素風繪製：用遮罩自動上陰影，產生 16×16 食材圖與 64×64 出餐容器
 (function () {
-  const D = window.DATA, IC = window.IC;
-  const f1 = v => (Math.round(v * 10) / 10).toString();
+  const D = window.DATA;
 
+  // ---------- 小工具 ----------
   function rng(seed) {
     return function () {
       seed |= 0; seed = seed + 0x6D2B79F5 | 0;
@@ -339,147 +354,357 @@ window.DATA = {
       return ((t ^ t >>> 14) >>> 0) / 4294967296;
     };
   }
+  function mk(w, h) { return Array.from({ length: h }, () => new Array(w).fill(0)); }
+  function hex2rgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  function rgb2hex(c) { return "#" + c.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")).join(""); }
+  function mix(h, t, target) { const a = hex2rgb(h), b = hex2rgb(target); return rgb2hex(a.map((v, i) => v + (b[i] - v) * t)); }
+  function palFromHex(hex) {
+    return { 1: mix(hex, 0.55, "#000000"), 2: hex, 3: mix(hex, 0.45, "#ffffff"), 4: mix(hex, 0.25, "#000000"), 5: mix(hex, 0.7, "#ffffff") };
+  }
+
+  // ---------- 形狀（遮罩）----------
+  function ell(m, cx, cy, rx, ry, v, ang) {
+    v = v === undefined ? 1 : v; ang = ang || 0;
+    const ca = Math.cos(ang), sa = Math.sin(ang);
+    for (let y = 0; y < m.length; y++) for (let x = 0; x < m[0].length; x++) {
+      const dx = x + 0.5 - cx, dy = y + 0.5 - cy;
+      const u = dx * ca + dy * sa, w = -dx * sa + dy * ca;
+      if ((u * u) / (rx * rx) + (w * w) / (ry * ry) <= 1) m[y][x] = v;
+    }
+  }
+  function rrect(m, x0, y0, x1, y1, r, v) {
+    v = v === undefined ? 1 : v;
+    for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+      const cx = Math.min(Math.max(x + 0.5, x0 + r), x1 - r), cy = Math.min(Math.max(y + 0.5, y0 + r), y1 - r);
+      if ((x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r * r) m[y][x] = v;
+    }
+  }
+  function seg(m, x0, y0, x1, y1, th, v) {
+    v = v === undefined ? 1 : v;
+    const minx = Math.floor(Math.min(x0, x1) - th), maxx = Math.ceil(Math.max(x0, x1) + th);
+    const miny = Math.floor(Math.min(y0, y1) - th), maxy = Math.ceil(Math.max(y0, y1) + th);
+    const dx = x1 - x0, dy = y1 - y0, L2 = dx * dx + dy * dy || 1;
+    for (let y = miny; y <= maxy; y++) for (let x = minx; x <= maxx; x++) {
+      if (y < 0 || x < 0 || y >= m.length || x >= m[0].length) continue;
+      const px = x + 0.5, py = y + 0.5;
+      let t = ((px - x0) * dx + (py - y0) * dy) / L2; t = Math.max(0, Math.min(1, t));
+      const qx = x0 + dx * t - px, qy = y0 + dy * t - py;
+      if (qx * qx + qy * qy <= (th / 2) * (th / 2)) m[y][x] = v;
+    }
+  }
+  function curve(m, pts, th, v) { for (let i = 0; i < pts.length - 1; i++) seg(m, pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], th, v); }
+  function ring(m, cx, cy, r1, r2, v) {
+    for (let y = 0; y < m.length; y++) for (let x = 0; x < m[0].length; x++) {
+      const d = Math.hypot(x + 0.5 - cx, y + 0.5 - cy);
+      if (d <= r2 && d >= r1) m[y][x] = v === undefined ? 1 : v;
+    }
+  }
+
+  // ---------- 上陰影：外框深色、左上亮、右下暗 ----------
+  // 回傳索引格：0 空白、1 外框、2 本色、3 亮面、4 暗面、5 強調
+  function shade(m, acc) {
+    const H = m.length, W = m[0].length;
+    let x0 = W, y0 = H, x1 = -1, y1 = -1;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (m[y][x]) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+    const out = mk(W, H);
+    if (x1 < 0) return out;
+    const bw = x1 - x0 + 1, bh = y1 - y0 + 1;
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (!m[y][x]) continue;
+      const edge = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => {
+        const yy = y + dy, xx = x + dx;
+        return yy < 0 || xx < 0 || yy >= H || xx >= W || !m[yy][xx];
+      });
+      if (edge) { out[y][x] = 1; continue; }
+      const s = (x - x0) / bw + (y - y0) / bh;
+      let c = s < 0.75 ? 3 : s > 1.25 ? 4 : 2;
+      if (acc && acc[y][x]) c = 5;
+      out[y][x] = c;
+    }
+    return out;
+  }
+
+  // ---------- 色盤 ----------
+  const PAL = {
+    egg: { 1: "#6b4a2a", 2: "#fffaf0", 3: "#ffffff", 4: "#e8dcc0", 5: "#f29a2e" },
+    green: { 1: "#2e5a22", 2: "#5ea03e", 3: "#9ad46a", 4: "#3f7a2c", 5: "#c8f08a" },
+    lightgreen: { 1: "#4f7d2f", 2: "#9fd16a", 3: "#d7f2a8", 4: "#6ea244", 5: "#ffffff" },
+    darkgreen: { 1: "#1d3a17", 2: "#3c7a2a", 3: "#6aa84a", 4: "#2a5a1e", 5: "#a6d46c" },
+    brown: { 1: "#3a1f10", 2: "#8b4a2a", 3: "#b97045", 4: "#5e2e16", 5: "#e0b070" },
+    redmeat: { 1: "#4a1414", 2: "#b8443a", 3: "#e27a6a", 4: "#7c2420", 5: "#f2c6a0" },
+    pink: { 1: "#6a3a40", 2: "#e7a3a0", 3: "#f9d3cf", 4: "#c0716e", 5: "#ffffff" },
+    cream: { 1: "#8a7a5a", 2: "#f1e4c4", 3: "#fffaf0", 4: "#d6c59b", 5: "#c0a070" },
+    white: { 1: "#9aa3ad", 2: "#f4f6f8", 3: "#ffffff", 4: "#d7dde3", 5: "#b9c3cd" },
+    yellow: { 1: "#8a6418", 2: "#f1c24a", 3: "#ffe68a", 4: "#d89b2c", 5: "#fff3c4" },
+    orange: { 1: "#7a3a12", 2: "#e88a3a", 3: "#ffb878", 4: "#b8561e", 5: "#ffd29a" },
+    dark: { 1: "#15100d", 2: "#3d3430", 3: "#6b5d55", 4: "#241c19", 5: "#8f7a6a" },
+    black: { 1: "#050505", 2: "#2a2a2e", 3: "#55555c", 4: "#101014", 5: "#7a7a80" },
+    tan: { 1: "#6e5230", 2: "#c9a26a", 3: "#eccf98", 4: "#9d7a48", 5: "#6e5230" },
+    sauce: { 1: "#3d1f0c", 2: "#a8642a", 3: "#d8985a", 4: "#6e3a16", 5: "#f0c080" },
+    steel: { 1: "#4d5763", 2: "#b9c1cc", 3: "#e6ebf1", 4: "#8a94a3", 5: "#f0a050" },
+    flame: { 1: "#8a2a10", 2: "#f28a28", 3: "#ffd46a", 4: "#d24a18", 5: "#fff1a8" }
+  };
+
+  // ---------- 食材形狀 ----------
+  const SHAPE = {
+    egg(m, a) { ell(m, 8, 8.5, 6.2, 5.2); ell(a, 9.2, 8.6, 2.3, 2.3); },
+    leaf(m, a) { ell(m, 8, 7.5, 6.2, 2.8, 1, -0.7); seg(m, 3, 14, 7, 9, 1.4); seg(a, 5, 11, 11, 4, 0.8); },
+    sprig(m, a) {
+      ell(m, 5.5, 8, 4.2, 1.8, 1, -0.9); ell(m, 10.5, 7, 4.2, 1.8, 1, 0.9); ell(m, 8, 11.5, 4, 1.6, 1, 0.1);
+      seg(m, 8, 15, 8, 9, 1.2); seg(a, 4, 7, 6, 9, 0.6); seg(a, 11, 6, 9, 8, 0.6);
+    },
+    curl(m, a) {
+      curve(m, [[3, 4], [7, 2.5], [11, 6], [7, 10], [4, 12], [10, 14]], 3);
+      for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) if (m[y][x] && (x + y) % 4 === 0) a[y][x] = 1;
+    },
+    slab(m, a) {
+      rrect(m, 2, 3, 14, 12, 2.5);
+      for (let x = 4; x < 13; x++) { if (x % 3 !== 0) { a[6][x] = 1; a[9][x] = 1; } }
+    },
+    leg(m, a) { ell(m, 6.2, 10, 4.2, 3.7); seg(m, 9, 7, 12.5, 3.5, 2.4); ell(m, 13.2, 2.8, 2, 2); ell(a, 13.2, 2.8, 1.2, 1.2); },
+    strand(m, a) {
+      for (let k = 0; k < 4; k++) {
+        const y0 = 3 + k * 3;
+        curve(m, [[1, y0], [4, y0 - 2], [8, y0 + 1], [12, y0 - 2], [15, y0]], 1.8);
+      }
+      for (let x = 2; x < 14; x += 4) a[5][x] = 1;
+    },
+    shred(m, a) {
+      for (let k = 0; k < 5; k++) {
+        const x0 = 2 + k * 3;
+        curve(m, [[x0, 1], [x0 + 1.6, 5], [x0, 9], [x0 + 1.6, 13], [x0, 15]], 1.7);
+        a[6][x0] = 1;
+      }
+    },
+    pile(m, a, seed) {
+      const r = rng(seed || 7);
+      for (let k = 0; k < 11; k++) {
+        const cx = 2.5 + r() * 11, cy = 2.5 + r() * 11, rr = 1.1 + r() * 0.7;
+        ell(m, cx, cy, rr, rr);
+        if (r() < 0.3) ell(a, cx, cy, 0.5, 0.5);
+      }
+    },
+    slice(m, a) { ring(m, 8, 8, 3.8, 6.4); ell(m, 8, 8, 3.2, 3.2, 0); ell(a, 8, 8, 1.2, 1.2); },
+    stick(m, a) { seg(m, 4, 15, 5, 2, 2); seg(m, 8, 15, 9, 1, 2); seg(m, 12, 15, 11, 3, 2); seg(a, 5, 4, 6, 4, 0.9); },
+    cluster(m, a) {
+      ell(m, 5, 10, 3, 3); ell(m, 10, 8, 3.3, 3.3); ell(m, 7, 5, 2.6, 2.6); ell(m, 11.5, 12.5, 2.6, 2.6); ell(m, 4, 5.5, 2.2, 2.2);
+      ell(a, 10, 7, 1, 1); ell(a, 5, 9, 0.8, 0.8);
+    },
+    blob(m, a) {
+      ell(m, 8, 8.5, 5.8, 5); ell(m, 3, 7, 2, 2); ell(m, 13, 7, 2, 2); ell(m, 8, 3, 2.2, 2);
+      ell(a, 6, 7, 1, 1); ell(a, 10, 10, 0.8, 0.8);
+    },
+    drop(m, a) {
+      ell(m, 8, 10.5, 5, 4.2);
+      for (let y = 3; y < 11; y++) { const hw = ((y - 3) / 8) * 4.6; for (let x = 0; x < 16; x++) if (Math.abs(x + 0.5 - 8) <= hw) m[y][x] = 1; }
+      a[8][5] = 1; a[7][5] = 1;
+    },
+    ball(m, a) { ell(m, 8, 8, 6, 6); ell(a, 5.5, 5.5, 1.5, 1.5); },
+    cube(m, a) { rrect(m, 3, 3, 13, 13, 1); for (let x = 4; x < 12; x++) { a[4][x] = 1; } },
+    wok(m, a) {
+      ell(m, 7, 8, 6.5, 4.5); for (let y = 0; y < 8; y++) for (let x = 0; x < 16; x++) m[y][x] = 0;
+      rrect(m, 2, 7, 13, 9, 0.5); rrect(m, 12, 6, 15, 8, 0.5); rrect(m, 13, 6, 16, 9, 0.5);
+      ell(a, 7, 10, 3, 1);
+    },
+    oven(m, a) { rrect(m, 1, 2, 15, 14, 1); ell(a, 8, 8, 3, 3); a[4][13] = 1; a[7][13] = 1; },
+    stove(m, a) { rrect(m, 1, 11, 15, 14, 1); ell(m, 8, 7.5, 3.6, 4.8); ell(a, 8, 8.5, 1.8, 2.8); }
+  };
+
+  // 食材 → [形狀, 色盤]
+  const SPR = {
+    egg: ["egg", "egg"], kongxin: ["sprig", "lightgreen"], woodear: ["blob", "dark"], chayote: ["leaf", "darkgreen"],
+    cordyceps: ["stick", "orange"], sorghum: ["pile", "brown"], karasumi: ["pile", "orange"], chicken: ["strand", "cream"],
+    garlicKoji: ["ball", "cream"], barley: ["pile", "cream"], chervil: ["sprig", "green"], arugula: ["leaf", "green"],
+    crispyRice: ["pile", "white"], wagyu: ["slab", "brown"], squid: ["curl", "pink"], kailan: ["sprig", "darkgreen"],
+    cauli: ["cluster", "cream"], duck: ["shred", "brown"], nostoc: ["blob", "brown"], pork: ["slab", "redmeat"], jowl: ["slab", "pink"],
+    tripe: ["curl", "cream"], chickenleg: ["leg", "brown"], kombu: ["curl", "black"], buckwheat: ["pile", "tan"],
+    gingerSoy: ["drop", "sauce"], sugar: ["pile", "white"], miso: ["drop", "yellow"], sesame: ["pile", "cream"],
+    sauce: ["drop", "sauce"], nuts: ["pile", "tan"], garlicSoy: ["ball", "sauce"], lettuce: ["leaf", "lightgreen"],
+    bamboo: ["slice", "yellow"], greenBean: ["stick", "green"], tremella: ["blob", "white"], puree: ["drop", "orange"],
+    brownSugar: ["cube", "brown"], nitroBall: ["ball", "white"], broth1: ["drop", "yellow"], broth2: ["drop", "cream"],
+    wok: ["wok", "black"], oven: ["oven", "steel"], stove: ["stove", "flame"], ball: ["ball", "white"], round: ["ball", "white"]
+  };
+
+  // 產生 16×16 顏色格（null 為透明）
+  const cache = {};
+  function spriteGrid(key) {
+    const def = SPR[key] || SPR.round;
+    const m = mk(16, 16), a = mk(16, 16);
+    SHAPE[def[0]](m, a, key.length * 13 + 5);
+    const idx = shade(m, a), pal = PAL[def[1]];
+    return idx.map(row => row.map(v => (v ? pal[v] : null)));
+  }
+  function spriteFor(key) { return cache["s:" + key] || (cache["s:" + key] = spriteGrid(key)); }
+
+  // 把顏色格變成 SVG（同色的橫列合併）
+  function toSVG(g, label) {
+    const H = g.length, W = g[0].length;
+    let s = "";
+    for (let y = 0; y < H; y++) {
+      let x = 0;
+      while (x < W) {
+        const c = g[y][x];
+        if (!c) { x++; continue; }
+        let e = x + 1;
+        while (e < W && g[y][e] === c) e++;
+        s += `<rect x="${x}" y="${y}" width="${e - x}" height="1" fill="${c}"/>`;
+        x = e;
+      }
+    }
+    return `<svg viewBox="0 0 ${W} ${H}" shape-rendering="crispEdges" role="img" aria-label="${label || ""}">${s}</svg>`;
+  }
 
   function iconKey(id) {
     const ing = D.ING[id];
     return ing ? ing.icon : id;
   }
 
+  // 圖示（16×16 像素）
   function icon(id, size) {
-    return `<svg viewBox="0 0 40 40" width="${size}" height="${size}" aria-hidden="true">${IC[iconKey(id)] || ""}</svg>`;
+    const key = iconKey(id);
+    const svg = cache["i:" + key] || (cache["i:" + key] = toSVG(spriteFor(key)));
+    return svg.replace("<svg ", `<svg width="${size}" height="${size}" `);
   }
 
-  function place(key, x, y, s, rot) {
-    return `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${rot || 0}) scale(${s}) translate(-20 -20)">${IC[key] || ""}</g>`;
-  }
-
-  // 麵條：用一組彎曲的線條表現，依麵體形狀調整
-  function noodles(baseKey, cx, cy, r, seed) {
-    const b = D.BASES[baseKey];
+  // 麵條小包（麵櫃用）
+  function noodleStrands(baseKey, cx, cy, r, seed, count, th) {
     const rand = rng(seed);
-    const n = b.wave === "straight" ? 16 : b.wave === "thin" ? 34 : 24;
-    const amp = b.wave === "curly" ? 3.2 : b.wave === "ribbon" ? 4.5 : b.wave === "thin" ? 2 : 1.2;
-    const w = b.wave === "ribbon" ? 6 : b.wave === "thin" ? 2.6 : 3.4;
-    const dark = shade(b.color, -0.35);
-    let under = "", over = "";
-    for (let i = 0; i < n; i++) {
-      const a = rand() * Math.PI * 2, d = Math.sqrt(rand()) * r;
-      let x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
-      let th = rand() * Math.PI * 2;
-      const pts = [[x, y]];
-      const len = b.wave === "straight" ? 52 : 30;
-      for (let s = 1; s <= 10; s++) {
-        th += (rand() - 0.5) * 0.9;
-        x += Math.cos(th) * len / 10;
-        y += Math.sin(th) * len / 10;
-        const off = amp * Math.sin(s * 1.6 + i);
-        pts.push([x - Math.sin(th) * off, y + Math.cos(th) * off]);
-      }
-      const d2 = "M" + pts.map(p => f1(p[0]) + " " + f1(p[1])).join(" L");
-      under += `<path d="${d2}" stroke="${dark}" stroke-width="${f1(w + 1.4)}"/>`;
-      over += `<path d="${d2}" stroke="${b.color}" stroke-width="${f1(w)}"/>`;
+    const m = mk(64, 64), a = mk(64, 64);
+    for (let k = 0; k < count; k++) {
+      const y0 = cy + (rand() - 0.5) * 2 * r;
+      const pts = [];
+      const amp = 2 + rand() * 3, ph = rand() * 6;
+      for (let x = -r; x <= r; x += 2) pts.push([cx + x, y0 + Math.sin(x * 0.35 + ph) * amp]);
+      curve(m, pts, th);
     }
-    return `<g fill="none" stroke-linecap="round" stroke-linejoin="round">${under}${over}</g>`;
+    return { m, a };
   }
 
-  function shade(hex, p) {
-    const n = parseInt(hex.slice(1), 16);
-    const f = v => Math.max(0, Math.min(255, Math.round(p < 0 ? v * (1 + p) : v + (255 - v) * p)));
-    return "#" + [n >> 16, n >> 8 & 255, n & 255].map(v => f(v).toString(16).padStart(2, "0")).join("");
-  }
-
-  // 依容器種類排放食材
-  function arrangeRing(items, cx, cy, radius, s) {
-    if (items.length === 0) return "";
-    if (items.length === 1) return place(iconKey(items[0]), cx, cy, s * 1.15, 0);
-    let out = "";
-    items.forEach((id, i) => {
-      const a = (i / items.length) * Math.PI * 2 - Math.PI / 2;
-      out += place(iconKey(id), cx + Math.cos(a) * radius, cy + Math.sin(a) * radius, s, (i * 37) % 40 - 20);
-    });
-    return out;
-  }
-
-  function arrangeRow(items, cy, s) {
-    const n = items.length;
-    let out = "";
-    items.forEach((id, i) => {
-      const x = n === 1 ? 120 : 60 + (i * 120) / (n - 1);
-      out += place(iconKey(id), x, cy + (i % 2 ? 6 : -6), s, (i * 23) % 30 - 15);
-    });
-    return out;
-  }
-
-  function bowlSVG(dish, have, base, broth) {
-    const isSoup = dish.cat === "soup";
-    const inner = isSoup ? broth : "#f5f1e7";
-    let s = `<circle cx="120" cy="108" r="96" fill="rgba(34,48,74,.14)"/>`;
-    s += `<circle cx="120" cy="100" r="96" fill="#2f3b52"/>`;
-    s += `<circle cx="120" cy="100" r="86" fill="${shade("#2f3b52", 0.12)}"/>`;
-    s += `<circle cx="120" cy="100" r="80" fill="${inner}"/>`;
-    if (!isSoup) {
-      s += `<defs><clipPath id="bowlclip"><circle cx="120" cy="100" r="74"/></clipPath></defs>`;
-      if (base) s += `<g clip-path="url(#bowlclip)">${noodles(base, 120, 100, 58, dish.id.length * 97 + 11)}</g>`;
-      else s += `<circle cx="120" cy="100" r="60" fill="none" stroke="#d8d1bf" stroke-width="2" stroke-dasharray="5 6"/>`;
-    }
-    if (isSoup) s += `<circle cx="120" cy="100" r="60" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="3"/>`;
-    s += arrangeRing(have, 120, 100, 44, 1.2);
-    return s;
-  }
-
-  function plateSVG(dish, have) {
-    let s = `<rect x="22" y="34" width="200" height="140" rx="16" fill="rgba(34,48,74,.14)"/>`;
-    s += `<rect x="20" y="28" width="200" height="140" rx="16" fill="#d7d2c4"/>`;
-    s += `<rect x="30" y="38" width="180" height="120" rx="12" fill="#ebe7dc"/>`;
-    s += arrangeRow(have, 98, 1.25);
-    return s;
-  }
-
-  function glassSVG(dish, have) {
-    let s = `<path d="M62 22 L178 22 L166 186 Q164 196 152 196 L88 196 Q76 196 74 186 Z" fill="rgba(34,48,74,.14)" transform="translate(4 6)"/>`;
-    s += `<path d="M62 22 L178 22 L166 186 Q164 196 152 196 L88 196 Q76 196 74 186 Z" fill="#e8f2f5" stroke="#8fb0bd" stroke-width="3"/>`;
-    s += `<path d="M70 70 L170 70 L166 186 Q164 194 152 194 L88 194 Q76 194 74 186 Z" fill="#f7f1d9" opacity=".7"/>`;
-    const pos = [[104, 62], [138, 62], [104, 116], [138, 116], [121, 160]];
-    have.forEach((id, i) => { const p = pos[i] || pos[pos.length - 1]; s += place(iconKey(id), p[0], p[1], 1.05, 0); });
-    return s;
-  }
-
-  // 公開：畫出一個出餐容器
-  // dish: 菜色資料；have: 已加的食材；base: 已放的麵（只有麵才有）；broth: 湯底顏色
-  function dishSVG(dish, have, base, broth) {
-    let inner;
-    if (dish.cat === "noodle" || dish.cat === "soup") inner = bowlSVG(dish, have, base, broth);
-    else if (dish.cat === "dessert") inner = glassSVG(dish, have);
-    else inner = plateSVG(dish, have);
-    return `<svg class="dish" viewBox="0 0 240 210" role="img" aria-label="${dish.zh}">${inner}</svg>`;
-  }
-
-  // 麵條小圖示（麵櫃用）
   function packSVG(baseKey) {
     const b = D.BASES[baseKey];
-    return `<svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#f3efe4" stroke="#c3cbd8"/><g clip-path="url(#pk${baseKey})"></g>${noodlesSmall(baseKey)}</svg>`;
-  }
-  function noodlesSmall(baseKey) {
-    const b = D.BASES[baseKey];
-    const dark = shade(b.color, -0.35);
-    const rand = rng(baseKey.length * 31 + baseKey.charCodeAt(0));
-    let under = "", over = "";
-    for (let i = 0; i < 9; i++) {
-      const a = rand() * 6.28, d = rand() * 12;
-      const x = 20 + Math.cos(a) * d, y = 20 + Math.sin(a) * d;
-      const x2 = x + 14 * Math.cos(a + 0.8), y2 = y + 14 * Math.sin(a + 0.8);
-      const d2 = `M${f1(x)} ${f1(y)} Q${f1((x + x2) / 2 + 3)} ${f1((y + y2) / 2 - 3)} ${f1(x2)} ${f1(y2)}`;
-      under += `<path d="${d2}" stroke="${dark}" stroke-width="3.6"/>`;
-      over += `<path d="${d2}" stroke="${b.color}" stroke-width="2.2"/>`;
+    const pal = palFromHex(b.color);
+    const m = mk(16, 16), a = mk(16, 16);
+    for (let k = 0; k < 3; k++) {
+      const y0 = 4 + k * 4;
+      curve(m, [[1, y0], [4, y0 - 2], [8, y0 + 1], [12, y0 - 2], [15, y0]], 2);
     }
-    return `<g fill="none" stroke-linecap="round">${under}${over}</g>`;
+    for (let x = 2; x < 14; x += 5) a[6][x] = 1;
+    const idx = shade(m, a);
+    const g = idx.map(row => row.map(v => (v ? pal[v] : null)));
+    return toSVG(g, b.zh).replace("<svg ", `<svg width="40" height="40" `);
+  }
+
+  // ---------- 出餐容器（64×64）----------
+  function place(g, sprite, ox, oy) {
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      const c = sprite[y][x];
+      const gy = oy + y, gx = ox + x;
+      if (c && gy >= 0 && gx >= 0 && gy < 64 && gx < 64) g[gy][gx] = c;
+    }
+  }
+
+  function bowlGrid(dish, have, base, broth) {
+    const g = Array.from({ length: 64 }, () => new Array(64).fill(null));
+    const isSoup = dish.cat === "soup";
+    for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
+      const d = Math.hypot(x + 0.5 - 32, y + 0.5 - 32);
+      const sd = Math.hypot(x + 0.5 - 34, y + 0.5 - 35);
+      if (sd <= 30.5 && d > 30) g[y][x] = "#22304a44";
+      if (d <= 30) {
+        if (d > 27.5) g[y][x] = "#2f3b52";
+        else if (d > 25) g[y][x] = "#7d8ba6";
+        else if (d > 23) g[y][x] = "#2f3b52";
+        else g[y][x] = isSoup ? (broth || "#e8d9a6") : (dish.sauce || "#f5f1e7");
+      }
+    }
+    if (isSoup) {
+      for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
+        const d = Math.hypot(x + 0.5 - 32, y + 0.5 - 32);
+        if (d <= 22 && d > 18 && (x + y) % 6 === 0) g[y][x] = "#fff6d6";
+      }
+    }
+    if (!isSoup && base) {
+      const r = rng(dish.id.charCodeAt(1) * 31 + 9);
+      const m = mk(64, 64), a = mk(64, 64);
+      for (let k = 0; k < 12; k++) {
+        const y0 = 32 + (r() - 0.5) * 38, amp = 3 + r() * 4, ph = r() * 6, fr = 0.3 + r() * 0.15;
+        const pts = [];
+        for (let x = 10; x <= 54; x += 2) pts.push([x, y0 + Math.sin(x * fr + ph) * amp]);
+        curve(m, pts, 3.2);
+      }
+      for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) if (Math.hypot(x + 0.5 - 32, y + 0.5 - 32) > 21) m[y][x] = 0;
+      for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) if (m[y][x] && (x * 7 + y * 3) % 11 === 0) a[y][x] = 1;
+      const idx = shade(m, a), pal = palFromHex(D.BASES[base].color);
+      for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) if (idx[y][x]) g[y][x] = pal[idx[y][x]];
+    }
+    const n = have.length;
+    have.forEach((id, i) => {
+      const sp = spriteFor(iconKey(id));
+      let cx = 32, cy = 32;
+      if (n > 1) { const ang = -Math.PI / 2 + (i / n) * Math.PI * 2; cx = 32 + Math.cos(ang) * 13; cy = 32 + Math.sin(ang) * 13; }
+      place(g, sp, Math.round(cx - 8), Math.round(cy - 8));
+    });
+    return g;
+  }
+
+  function plateGrid(dish, have) {
+    const g = Array.from({ length: 64 }, () => new Array(64).fill(null));
+    const m = mk(64, 64), a = mk(64, 64);
+    rrect(m, 3, 12, 61, 52, 6);
+    rrect(a, 6, 15, 58, 49, 4);
+    const idx = shade(m, null);
+    for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) {
+      if (!idx[y][x]) continue;
+      g[y][x] = idx[y][x] === 1 ? "#2f3b52" : idx[y][x] === 3 ? "#c2cbda" : idx[y][x] === 4 ? "#6f7d97" : "#98a4bb";
+    }
+    const n = have.length;
+    const pos = n <= 1 ? [[24, 24]] : n === 2 ? [[14, 24], [34, 24]] : [[8, 24], [24, 24], [40, 24]];
+    have.forEach((id, i) => {
+      const p = pos[i] || pos[pos.length - 1];
+      place(g, spriteFor(iconKey(id)), p[0], p[1]);
+    });
+    return g;
+  }
+
+  function glassGrid(dish, have) {
+    const g = Array.from({ length: 64 }, () => new Array(64).fill(null));
+    for (let y = 4; y < 60; y++) {
+      const half = 15 + ((y - 4) / 56) * -2;
+      for (let x = 0; x < 64; x++) {
+        if (Math.abs(x + 0.5 - 32) <= half) {
+          const edge = Math.abs(x + 0.5 - 32) > half - 1.4 || y > 57;
+          g[y][x] = edge ? "#7fa3b1" : y > 40 ? "#f7e9b8" : "#eef7f9";
+        }
+      }
+    }
+    const pos = [[17, 8], [33, 8], [17, 28], [33, 28]];
+    have.forEach((id, i) => {
+      const p = pos[i] || pos[pos.length - 1];
+      place(g, spriteFor(iconKey(id)), p[0], p[1]);
+    });
+    return g;
+  }
+
+  const DISH_CACHE = {};
+  // 公開：畫出一個出餐容器（有快取，避免每次都重算）
+  function dishSVG(dish, have, base, broth) {
+    const key = [dish.id, have.join(","), base || "", broth || ""].join("|");
+    if (DISH_CACHE[key]) return DISH_CACHE[key];
+    let g;
+    if (dish.cat === "noodle" || dish.cat === "soup") g = bowlGrid(dish, have, base, broth);
+    else if (dish.cat === "dessert") g = glassGrid(dish, have);
+    else g = plateGrid(dish, have);
+    const svg = toSVG(g, dish.zh).replace("<svg ", `<svg class="dish" `);
+    if (Object.keys(DISH_CACHE).length > 300) for (const k in DISH_CACHE) delete DISH_CACHE[k];
+    DISH_CACHE[key] = svg;
+    return svg;
   }
 
   window.ART = { icon, dishSVG, packSVG, iconKey };
 })();
 </script>
 <script>
-// 遊戲規則：狀態、點單、爐台、判定與結算
+// 遊戲規則（簡化版）：沒有爐台、沒有扣分陷阱，料都在冰箱裡，點一下或拖一下就放進去
 (function () {
   const D = window.DATA;
   const TOTAL = 180; // 一局 3 分鐘
@@ -488,9 +713,7 @@ window.DATA = {
   const S = {
     running: false, t: 0, phase: 0,
     score: 0, revenue: 0, served: 0, missed: 0, mistakes: 0, taps: 0,
-    combo: 0, bestCombo: 0,
-    slots: [], stations: { wok: [], oven: [], stove: [] },
-    nextAt: [0, 0], nextEvent: 0,
+    slots: [], stations: {}, nextAt: [0, 0],
     lastIds: [], dishSeen: {}, uid: 0
   };
   window.S = S;
@@ -501,22 +724,6 @@ window.DATA = {
     for (let i = 0; i < D.PHASES.length; i++) if (t < D.PHASES[i].until) return i;
     return D.PHASES.length - 1;
   }
-  function stationUnlocked(key) { return D.STATIONS[key].phase <= S.phase; }
-  function stationFor(id) {
-    const ing = D.ING[id];
-    return ing && ing.station ? ing.station : null;
-  }
-  function stationOpenFor(id) {
-    // 找一台能做這個、而且還有空位的爐台
-    const keys = Object.keys(D.STATIONS);
-    for (const k of keys) {
-      if (!D.STATIONS[k].accepts.includes(id)) continue;
-      if (!stationUnlocked(k)) continue;
-      if (S.stations[k].length >= 2) continue;
-      return k;
-    }
-    return null;
-  }
 
   function eligible(phase) {
     return D.DISHES.filter(d =>
@@ -525,17 +732,19 @@ window.DATA = {
       ((d.cat === "soup" || d.cat === "dessert") && phase >= 2));
   }
 
+  // 每道菜的時限都比較寬，讓人有時間看清楚
+  const LIMIT = { noodle: 110, side: 85, soup: 85, dessert: 85 };
+
   function makeOrder() {
     const pool = eligible(S.phase);
     const fresh = pool.filter(d => !S.lastIds.slice(-3).includes(d.id));
-    const dish = (fresh.length ? fresh : pool)[Math.floor(Math.random() * (fresh.length || pool.length))];
-    const base = dish.cat === "noodle" ? 100 : dish.cat === "side" ? 58 : 62;
-    const vip = S.phase >= 1 && Math.random() < 0.18;
-    const limit = (vip ? base * 0.8 : base) + (S.phase === 0 ? 15 : 0);
+    const list = fresh.length ? fresh : pool;
+    const dish = list[Math.floor(Math.random() * list.length)];
     S.lastIds.push(dish.id);
     const first = !S.dishSeen[dish.id];
     S.dishSeen[dish.id] = true;
-    return { id: ++S.uid, dish, left: limit, limit, vip, mist: 0, first };
+    const limit = LIMIT[dish.cat];
+    return { id: ++S.uid, dish, left: limit, limit, mist: 0, first };
   }
 
   function emptySlot() { return { order: null, base: null, have: [] }; }
@@ -543,34 +752,32 @@ window.DATA = {
   function resetGame() {
     S.running = true; S.t = 0; S.phase = 0;
     S.score = 0; S.revenue = 0; S.served = 0; S.missed = 0; S.mistakes = 0; S.taps = 0;
-    S.combo = 0; S.bestCombo = 0;
     S.slots = [emptySlot(), emptySlot()];
-    S.stations = { wok: [], oven: [], stove: [] };
-    S.nextAt = [0.4, 1.2]; S.nextEvent = 30;
+    S.nextAt = [0.5, 1.5];
     S.lastIds = []; S.dishSeen = {}; S.uid = 0;
     fill();
   }
 
-  // 有新客人入座就回傳 true，讓介面馬上重畫
+  // 有新客人入座就回傳 true
   function fill() {
     const n = slotsFor(S.phase);
     let added = false;
     for (let i = 0; i < n; i++) {
       const sl = S.slots[i];
       if (!sl.order && S.t >= S.nextAt[i]) {
-        S.slots[i] = { order: makeOrder(), base: null, have: [] };
+        const o = makeOrder();
+        // 有些菜本來就有底料（例如雨來菇），一入座就已經在盤子上
+        S.slots[i] = { order: o, base: null, have: (o.dish.pre || []).slice() };
         added = true;
       }
     }
     return added;
   }
 
-  function burnTime() { return S.phase === 0 ? 14 : 10; }
-
   // 判定：這個東西能不能放進第 i 格；回傳 null 代表可以，否則是提示文字
   function check(i, payload) {
     const sl = S.slots[i];
-    if (!sl || !sl.order) return "這格沒有客人";
+    if (!sl || !sl.order) return "這格還沒有客人";
     const dish = sl.order.dish;
     if (payload.kind === "base") {
       if (!dish.base) return "這道菜不用麵";
@@ -579,11 +786,9 @@ window.DATA = {
       return null;
     }
     const id = payload.id;
-    if (payload.from === "fridge" && D.ING[id].station) return "先拿到" + D.STATIONS[D.ING[id].station].zh + "處理";
+    if (sl.have.includes(id)) return "已經加過了";
     if (!dish.items.includes(id)) return id === "egg" ? "這碗沒有溏心蛋！" : "這道菜不加這個";
     if (dish.base && !sl.base) return "先放麵條";
-    if (sl.have.includes(id)) return "已經加過了";
-    if (dish.ordered && dish.items[sl.have.length] !== id) return "順序不對喔";
     return null;
   }
 
@@ -600,16 +805,15 @@ window.DATA = {
     return d.items.every(x => sl.have.includes(x));
   }
 
+  // 放錯只提示，不扣分，只記錄次數
   function wrong(i, msg) {
     S.mistakes++;
-    S.combo = 0;
     const o = S.slots[i] && S.slots[i].order;
     if (o) o.mist++;
-    if (S.phase > 0) S.score = Math.max(0, S.score - 5);
     return { ok: false, msg };
   }
 
-  // 放到出餐格
+  // 拖到第 i 格
   function dropOnSlot(i, payload) {
     S.taps++;
     const why = check(i, payload);
@@ -618,32 +822,20 @@ window.DATA = {
     return { ok: true, msg: complete(S.slots[i]) ? "可以出餐了！" : "" };
   }
 
-  // 點一下：自動找能放的地方
+  // 點一下：自動放到第一個需要這個料的客人那裡
   function tapAdd(payload) {
     S.taps++;
     const n = slotsFor(S.phase);
-    if (payload.from === "fridge" && D.ING[payload.id] && D.ING[payload.id].station) {
-      const k = stationOpenFor(payload.id);
-      if (k) return { ok: true, msg: "", cook: k };
-      return wrong(0, "爐台滿了或還沒開");
-    }
     let first = null;
     for (let i = 0; i < n; i++) {
       const why = check(i, payload);
-      if (!why) { apply(i, payload); return { ok: true, msg: complete(S.slots[i]) ? "可以出餐了！" : "", slot: i }; }
+      if (!why) {
+        apply(i, payload);
+        return { ok: true, msg: complete(S.slots[i]) ? "可以出餐了！" : "", slot: i };
+      }
       if (first === null) first = why;
     }
-    return wrong(0, first || "沒有合適的客人");
-  }
-
-  // 把生食材放上爐台
-  function cookAt(key, id) {
-    S.taps++;
-    if (!stationUnlocked(key)) return { ok: false, msg: "還沒開放" };
-    if (!D.STATIONS[key].accepts.includes(id)) return wrong(0, "這台爐不做這個");
-    if (S.stations[key].length >= 2) return { ok: false, msg: "爐台滿了，等一下" };
-    S.stations[key].push({ id, start: S.t, ready: false, readyAt: 0 });
-    return { ok: true, msg: "" };
+    return wrong(0, first || "現在沒有客人要這個");
   }
 
   function serve(i) {
@@ -651,25 +843,20 @@ window.DATA = {
     if (!complete(sl)) return null;
     const o = sl.order;
     const perfect = o.mist === 0;
-    const speed = Math.round(40 * Math.max(0, o.left) / o.limit);
-    let pts = 100 + speed;
-    if (perfect) { S.combo++; pts += 30 + 10 * Math.min(S.combo, 5); }
-    else S.combo = 0;
-    S.bestCombo = Math.max(S.bestCombo, S.combo);
-    if (o.vip) pts *= 2;
+    const speed = Math.round(60 * Math.max(0, o.left) / o.limit);
+    const pts = 100 + speed + (perfect ? 30 : 0);
     S.score += pts;
-    S.revenue += o.dish.price * (o.vip ? 2 : 1);
+    S.revenue += o.dish.price;
     S.served++;
     S.slots[i] = emptySlot();
-    S.nextAt[i] = S.t + 0.5;
-    return { pts, perfect, vip: o.vip };
+    S.nextAt[i] = S.t + 1.5;
+    return { pts, perfect };
   }
 
   function fail(i) {
     S.missed++;
-    S.combo = 0;
     S.slots[i] = emptySlot();
-    S.nextAt[i] = S.t + 0.8;
+    S.nextAt[i] = S.t + 2;
   }
 
   // 每一幀更新：回傳事件讓介面顯示提示
@@ -680,21 +867,6 @@ window.DATA = {
     const ph = phaseAt(S.t);
     if (ph !== S.phase) { S.phase = ph; events.push({ type: "phase", ph }); }
 
-    // 爐台：做好、燒焦
-    Object.keys(S.stations).forEach(k => {
-      const st = D.STATIONS[k];
-      S.stations[k] = S.stations[k].filter(it => {
-        if (!it.ready && S.t >= it.start + st.time) { it.ready = true; it.readyAt = S.t; events.push({ type: "ready", id: it.id }); }
-        if (it.ready && S.t >= it.readyAt + burnTime()) {
-          events.push({ type: "burn", id: it.id });
-          if (S.phase > 0) S.score = Math.max(0, S.score - 5);
-          return false;
-        }
-        return true;
-      });
-    });
-
-    // 客人等待
     const n = slotsFor(S.phase);
     for (let i = 0; i < n; i++) {
       const sl = S.slots[i];
@@ -703,39 +875,28 @@ window.DATA = {
       if (sl.order.left <= 0) { fail(i); events.push({ type: "fail", i }); }
     }
 
-    // 催單事件
-    if (S.phase >= 1 && S.t >= S.nextEvent) {
-      S.nextEvent = S.t + 24 + Math.random() * 10;
-      const act = [];
-      for (let i = 0; i < n; i++) if (S.slots[i].order) act.push(i);
-      if (act.length) {
-        const i = act[Math.floor(Math.random() * act.length)];
-        S.slots[i].order.left -= 12;
-        events.push({ type: "rush", i });
-      }
-    }
-
     if (fill()) events.push({ type: "new" });
     if (S.t >= TOTAL) { S.running = false; events.push({ type: "end" }); }
     return events;
   }
 
+  // 目前最該做的一步
   function hint() {
     const n = slotsFor(S.phase);
     for (let i = 0; i < n; i++) {
       const sl = S.slots[i];
       if (!sl.order) continue;
       const d = sl.order.dish;
-      if (d.base && !sl.base) return "先把「" + D.BASES[d.base].zh + "」拖到碗裡";
-      let miss;
-      if (d.ordered) miss = d.items[sl.have.length];
-      else miss = d.items.find(x => !sl.have.includes(x));
-      if (!miss) return "按「出餐」送出";
-      const st = stationFor(miss);
-      if (st) return "把「" + D.ING[miss].zh + "」放到" + D.STATIONS[st].zh + "，做好再拖過來";
-      return "從冰箱拿「" + D.ING[miss].zh + "」放到" + (d.cat === "noodle" ? "碗" : d.cat === "soup" ? "湯碗" : d.cat === "dessert" ? "杯子" : "盤子") + "裡";
+      if (d.base && !sl.base) return "先點「" + D.BASES[d.base].zh + "」，麵會放進碗裡";
+      const miss = d.items.find(x => !sl.have.includes(x));
+      if (!miss) return "料都齊了，按「出餐」送出";
+      return "點「" + D.ING[miss].zh + "」，會放進" + containerName(d) + "裡";
     }
     return "等客人入座…";
+  }
+
+  function containerName(d) {
+    return d.cat === "noodle" ? "碗" : d.cat === "soup" ? "湯碗" : d.cat === "dessert" ? "杯子" : "盤子";
   }
 
   function rank(score) { return score >= 1500 ? 3 : score >= 900 ? 2 : score >= 400 ? 1 : 0; }
@@ -743,23 +904,21 @@ window.DATA = {
   function setBest(v) { try { localStorage.setItem(BEST_KEY, String(v)); } catch (e) { } }
 
   window.LOGIC = {
-    resetGame, tick, check, dropOnSlot, tapAdd, cookAt, serve, hint,
-    complete, stationUnlocked, stationOpenFor, rank, getBest, setBest,
-    slotsFor, stationFor, eligible
+    resetGame, tick, check, dropOnSlot, tapAdd, serve, hint,
+    complete, rank, getBest, setBest, slotsFor, eligible
   };
 })();
 </script>
 <script>
-// 介面：畫面切換、拖曳與點擊、音效與動畫迴圈
+// 介面：畫面切換、拖曳與點擊、音效與動畫迴圈（簡化版：沒有爐台，料直接從冰箱拿）
 (function () {
   const D = window.DATA, A = window.ART, L = window.LOGIC, S = window.S, TOTAL = window.GAME_TOTAL;
   const app = document.getElementById("app");
   const RANKS = ["洗碗小幫手", "實習廚師", "二廚", "主廚認證"];
-  let raf = 0, last = 0, activeTab = "main", audio = null, pend = null, ghost = null, groupOf = {};
+  let raf = 0, last = 0, activeTab = D.TABS[0].key, audio = null, pend = null, ghost = null, groupOf = {};
 
-  // 每個食材屬於哪一個冰箱分頁（第一次出現的菜色決定）
-  const TAB_FOR_CAT = { noodle: "main", side: "side", soup: "soup", dessert: "dessert" };
-  D.DISHES.forEach(d => d.items.forEach(id => { if (!(id in groupOf)) groupOf[id] = TAB_FOR_CAT[d.cat]; }));
+  // 每個食材屬於哪一個冰箱分頁
+  D.TABS.forEach(t => t.ids.forEach(id => { groupOf[id] = t.key; }));
 
   function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
   function mmss(sec) { const s = Math.ceil(sec), m = Math.floor(s / 60), r = s % 60; return m + ":" + (r < 10 ? "0" : "") + r; }
@@ -796,10 +955,10 @@ window.DATA = {
     app.innerHTML = `<div class="intro">
       <div class="brand">久時拌麵</div>
       <h1>拌麵出餐挑戰</h1>
-      <p>三分鐘一班，客人一張一張來。照單把麵、小菜和湯做好，出餐越快、越準，分數越高。</p>
+      <p>三分鐘一班，客人一位一位來。照單把麵和配料湊齊，按「出餐」送出，越快越好。</p>
       <ol class="howto">
-        <li><b>1</b><span>從「麵櫃」拖一種麵到碗上，點一下也可以</span></li>
-        <li><b>2</b><span>從「冰箱」拿料；要炒、要烤的先放到爐台，做好再拖過來</span></li>
+        <li><b>1</b><span>從「麵櫃」點一下麵，或拖到客人的碗上</span></li>
+        <li><b>2</b><span>從「冰箱」點一下配料，會自動放進客人的碗或盤</span></li>
         <li><b>3</b><span>料都到齊，按「出餐」送出</span></li>
       </ol>
       <button class="primary" id="go">開　始</button>
@@ -812,22 +971,20 @@ window.DATA = {
   function startGame() {
     try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.resume) audio.resume(); } catch (e) { audio = null; }
     L.resetGame();
-    activeTab = "main";
+    activeTab = D.TABS[0].key;
     app.innerHTML = `
       <div class="hud">
         <div><div class="lbl">分數</div><div class="val" id="hs">0</div></div>
         <div class="clock" id="hc"><div class="lbl">剩餘時間</div><div class="val" id="ht">3:00</div></div>
         <div class="r"><div class="lbl">營業額</div><div class="val" id="hr">$0</div></div>
       </div>
-      <div class="stagebar"><span id="stage"></span><span class="combo" id="combo"></span></div>
+      <div class="stagebar"><span id="stage"></span></div>
       <div class="tip" id="tip"></div>
       <div class="pass" id="pass"></div>
       <div class="kitchen">
-        <div class="row-title"><span>爐台</span><span>生食材拖上去，做好再拿</span></div>
-        <div class="stations" id="stations"></div>
-        <div class="row-title"><span>麵櫃</span><span>拖到碗上</span></div>
+        <div class="row-title"><span>麵櫃</span><span>點一下或拖到碗上</span></div>
         <div class="noodles" id="noodles"></div>
-        <div class="row-title"><span>冰箱</span></div>
+        <div class="row-title"><span>冰箱</span><span>點一下自動放進客人的碗</span></div>
         <div class="tabs" id="tabs"></div>
         <div class="fridge" id="fridge"></div>
       </div>
@@ -843,7 +1000,6 @@ window.DATA = {
   function renderAll() {
     renderHUD();
     renderPass();
-    renderStations();
     renderTabs();
     renderFridge();
     document.getElementById("tip").textContent = L.hint();
@@ -854,7 +1010,7 @@ window.DATA = {
     set("hs", S.score.toLocaleString());
     set("hr", "$" + S.revenue.toLocaleString());
     set("stage", D.PHASES[S.phase].label.zh);
-    set("combo", S.combo >= 2 ? "連續完美 ×" + S.combo : "");
+    set("ht", mmss(Math.max(0, TOTAL - S.t)));
     const hc = document.getElementById("hc");
     if (hc) hc.classList.toggle("low", TOTAL - S.t <= 20);
   }
@@ -871,10 +1027,10 @@ window.DATA = {
   function slotHTML(i) {
     const sl = S.slots[i];
     if (!sl.order) {
-      return `<div class="slot empty" data-drop="slot:${i}">
+      return `<div class="slot empty">
         <div class="ticket"><span>桌 ${i + 1}</span><span></span></div>
-        <div class="name">下一位客人準備中</div>
-        <div style="flex:1;display:grid;place-items:center;color:var(--soft);font-size:12px;min-height:120px">等待入座</div>
+        <div class="name">等待入座</div>
+        <div style="flex:1;display:grid;place-items:center;color:var(--soft);font-size:12px;min-height:120px">下一位客人馬上來</div>
       </div>`;
     }
     const o = sl.order, d = o.dish, done = L.complete(sl);
@@ -882,13 +1038,9 @@ window.DATA = {
     const chips = [];
     if (d.base) chips.push({ label: D.BASES[d.base].zh, ok: !!sl.base });
     d.items.forEach(x => chips.push({ label: D.ING[x].zh, ok: sl.have.includes(x) }));
-    const showAll = o.first || S.phase === 0;
-    const chipHTML = chips.map(c => {
-      const txt = showAll || c.ok ? esc(c.label) : "？";
-      return `<span class="chip${c.ok ? " ok" : ""}">${txt}</span>`;
-    }).join("");
+    const chipHTML = chips.map(c => `<span class="chip${c.ok ? " ok" : ""}">${esc(c.label)}</span>`).join("");
     return `<div class="slot${done ? " ready" : ""}" data-drop="slot:${i}">
-      <div class="ticket"><span>桌 ${i + 1}${o.vip ? '<span class="vip">VIP ×2</span>' : ""}</span><span>$${d.price}</span></div>
+      <div class="ticket"><span>桌 ${i + 1}</span><span>$${d.price}</span></div>
       <div class="name">${d.no ? d.no + " " : ""}${esc(d.zh)}</div>
       <div class="recipe">${chipHTML}</div>
       ${A.dishSVG(d, sl.have, sl.base, broth)}
@@ -897,40 +1049,20 @@ window.DATA = {
     </div>`;
   }
 
-  function renderStations() {
-    const box = document.getElementById("stations");
-    box.innerHTML = Object.keys(D.STATIONS).map(k => {
-      const st = D.STATIONS[k], open = L.stationUnlocked(k);
-      const burners = [0, 1].map(j => {
-        const it = S.stations[k][j];
-        if (!it) return `<div class="burner"></div>`;
-        const ic = A.icon(it.id, 32);
-        if (it.ready) {
-          const src = esc(JSON.stringify({ kind: "ing", id: it.id, from: "station", station: k, idx: j }));
-          return `<div class="burner ready" data-src='${src}'>${ic}</div>`;
-        }
-        return `<div class="burner on">${ic}<div class="prog"><i data-bar="st${k}${j}"></i></div></div>`;
-      }).join("");
-      return `<div class="station${open ? "" : " locked"}" data-drop="station:${k}">
-        <div class="sname">${st.zh}${open ? "" : "（未開放）"}</div>
-        <div class="burners">${burners}</div>
-      </div>`;
-    }).join("");
-    // 站名前加上小圖示
-    box.querySelectorAll(".sname").forEach((el, idx) => {
-      const k = Object.keys(D.STATIONS)[idx];
-      el.insertAdjacentHTML("beforebegin", A.icon(D.STATIONS[k].icon, 26));
-    });
-  }
-
   function renderTabs() {
     const tabs = document.getElementById("tabs");
-    const needed = new Set();
+    const needed = new Set(), needIds = new Set();
     const n = L.slotsFor(S.phase);
     for (let i = 0; i < n; i++) {
       const sl = S.slots[i];
       if (!sl.order) continue;
-      sl.order.dish.items.forEach(x => { if (!sl.have.includes(x)) needed.add(groupOf[x]); });
+      sl.order.dish.items.forEach(x => { if (!sl.have.includes(x)) { needed.add(groupOf[x]); needIds.add(x); } });
+    }
+    // 目前分頁沒有客人要的料時，自動切到有需要的分頁
+    const cur = D.TABS.find(t => t.key === activeTab);
+    if (!(cur && cur.ids.some(x => needIds.has(x)))) {
+      const next = D.TABS.find(t => S.phase >= t.phase && t.ids.some(x => needIds.has(x)));
+      if (next) activeTab = next.key;
     }
     tabs.innerHTML = D.TABS.map(t => {
       const open = S.phase >= t.phase;
@@ -941,11 +1073,11 @@ window.DATA = {
 
   function renderFridge() {
     const box = document.getElementById("fridge");
-    const ids = Object.keys(D.ING).filter(id => groupOf[id] === activeTab);
+    const ids = (D.TABS.find(t => t.key === activeTab) || D.TABS[0]).ids;
     box.innerHTML = ids.map(id => {
       const ing = D.ING[id];
-      const src = esc(JSON.stringify({ kind: "ing", id, from: "fridge" }));
-      return `<div class="ing" data-src='${src}'>${A.icon(id, 30)}<span>${esc(ing.zh)}</span>${ing.station ? '<span class="tag">' + D.STATIONS[ing.station].zh + "</span>" : ""}</div>`;
+      const src = esc(JSON.stringify({ kind: "ing", id }));
+      return `<div class="ing" data-src='${src}'>${A.icon(id, 30)}<span>${esc(ing.zh)}</span></div>`;
     }).join("");
   }
 
@@ -959,13 +1091,6 @@ window.DATA = {
       const el = document.querySelector(`[data-bar="slot${i}"]`);
       if (o && el) el.style.width = Math.max(0, (o.left / o.limit) * 100) + "%";
     }
-    Object.keys(S.stations).forEach(k => {
-      S.stations[k].forEach((it, j) => {
-        if (it.ready) return;
-        const el = document.querySelector(`[data-bar="st${k}${j}"]`);
-        if (el) el.style.width = Math.min(100, ((S.t - it.start) / D.STATIONS[k].time) * 100) + "%";
-      });
-    });
   }
 
   function loop(now) {
@@ -975,10 +1100,7 @@ window.DATA = {
     let finished = false;
     events.forEach(ev => {
       if (ev.type === "phase") { toast(D.PHASES[ev.ph].label.zh, true); sfx.ding(); }
-      if (ev.type === "ready") sfx.ready();
-      if (ev.type === "burn") toast("爐火太久，焦了！");
       if (ev.type === "fail") { toast("客人等太久走了"); sfx.buzz(); }
-      if (ev.type === "rush") toast("客人催單！");
       if (ev.type === "end") finished = true;
     });
     if (finished) return endGame();
@@ -988,6 +1110,11 @@ window.DATA = {
   }
 
   // ---------- 拖曳與點擊 ----------
+  // iPhone 的網址列會改變可視高度，這裡用實際高度來排版
+  function setVH() { document.documentElement.style.setProperty("--vh", (window.innerHeight * 0.01) + "px"); }
+  setVH();
+  window.addEventListener("resize", setVH);
+
   function startDrag(p) {
     ghost = document.createElement("div");
     ghost.className = "ghost";
@@ -1018,54 +1145,28 @@ window.DATA = {
   }
 
   function normalize(p) {
-    return p.kind === "base" ? { kind: "base", id: p.id } : { kind: "ing", id: p.id, from: p.from };
-  }
-
-  function takeFromStation(p) {
-    const arr = S.stations[p.station];
-    const idx = arr.findIndex(x => x.id === p.id && x.ready);
-    if (idx >= 0) arr.splice(idx, 1);
+    return p.kind === "base" ? { kind: "base", id: p.id } : { kind: "ing", id: p.id };
   }
 
   function handleDrop(p, target) {
     const [kind, key] = target.split(":");
-    if (kind === "slot") {
-      const i = +key;
-      const r = L.dropOnSlot(i, normalize(p));
-      if (r.ok) {
-        if (p.from === "station") takeFromStation(p);
-        sfx.tap();
-        if (r.msg) toast(r.msg, true);
-        if (L.complete(S.slots[i])) sfx.ready();
-      } else {
-        sfx.buzz();
-        toast(r.msg);
-      }
-      renderAll();
-      if (!r.ok) { const el = document.querySelectorAll("#pass .slot")[i]; if (el) el.classList.add("shake"); }
-      return;
+    if (kind !== "slot") return;
+    const i = +key;
+    const r = L.dropOnSlot(i, normalize(p));
+    if (r.ok) {
+      sfx.tap();
+      if (r.msg) toast(r.msg, true);
+      if (L.complete(S.slots[i])) sfx.ready();
+    } else {
+      sfx.buzz();
+      toast(r.msg);
     }
-    if (kind === "station") {
-      if (p.kind === "base") { toast("麵要拖到碗上，不是爐台"); return; }
-      if (p.from === "station") { toast("這個已經在爐台上了"); return; }
-      const r = L.cookAt(key, p.id);
-      if (r.ok) { sfx.tap(); } else { sfx.buzz(); toast(r.msg); }
-      renderAll();
-    }
+    renderAll();
+    if (!r.ok) { const el = document.querySelectorAll("#pass .slot")[i]; if (el) el.classList.add("shake"); }
   }
 
   function handleTap(p) {
-    let r;
-    if (p.kind === "base") {
-      r = L.tapAdd({ kind: "base", id: p.id });
-    } else if (p.from === "fridge" && D.ING[p.id].station) {
-      const k = L.stationOpenFor(p.id);
-      if (!k) { toast("爐台都滿了或還沒開放"); return; }
-      r = L.cookAt(k, p.id);
-    } else {
-      r = L.tapAdd({ kind: "ing", id: p.id, from: p.from });
-      if (r.ok && p.from === "station") takeFromStation(p);
-    }
+    const r = L.tapAdd(normalize(p));
     if (r.ok) { sfx.tap(); if (r.msg) toast(r.msg, true); }
     else { sfx.buzz(); toast(r.msg); }
     renderAll();
@@ -1143,7 +1244,7 @@ window.DATA = {
         <div><b>${S.missed}</b><span>客人走掉</span></div>
         <div><b>${acc}%</b><span>準確率</span></div>
       </div>
-      <p style="margin:0;color:var(--soft);font-size:13px;line-height:1.6;max-width:320px">這一班你替久時賺進 $${S.revenue.toLocaleString()}，最高連續完美 ×${S.bestCombo}。</p>
+      <p style="margin:0;color:var(--soft);font-size:13px;line-height:1.6;max-width:320px">這一班你替久時賺進 $${S.revenue.toLocaleString()}。</p>
       <button class="primary" id="again">再玩一次</button>
       <button class="ghostbtn" id="home">回首頁</button>
     </div>`;
