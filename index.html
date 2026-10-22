@@ -16,36 +16,41 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{background:var(--paper);color:var(--ink);font-family:var(--sans);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 svg{image-rendering:pixelated}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 #app{height:100vh;height:calc(var(--vh,1vh)*100);max-width:460px;margin:0 auto;display:flex;flex-direction:column;padding-block:8px;padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));gap:8px}
 
-/* 開始畫面 */
-.intro{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:12px}
+/* 開始與選角色 */
+.intro,.choose{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;padding:12px}
 .intro h1{font-family:var(--serif);font-weight:900;font-size:clamp(30px,9vw,40px);letter-spacing:.12em;color:var(--deep);margin:0}
-.intro .brand{font-family:var(--serif);letter-spacing:.4em;color:var(--brand);font-size:13px}
-.intro p{margin:0;color:var(--soft);line-height:1.7;font-size:14px;max-width:320px}
-.howto{list-style:none;padding:0;margin:4px 0 0;display:grid;gap:8px;text-align:left;font-size:14px;max-width:320px;width:100%}
+.intro .brand,.choose .brand{font-family:var(--serif);letter-spacing:.4em;color:var(--brand);font-size:14px}
+.intro p{margin:0;color:var(--soft);line-height:1.7;font-size:16px;max-width:340px}
+.howto{list-style:none;padding:0;margin:4px 0 0;display:grid;gap:8px;text-align:left;font-size:16px;max-width:340px;width:100%}
 .howto li{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
-.howto b{width:24px;height:24px;flex:none;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:12px}
-.primary{background:var(--brand);color:#fff;font-family:var(--serif);font-weight:700;font-size:20px;letter-spacing:.3em;padding:14px 0;width:min(100%,300px);border-radius:0;border:2px solid var(--deep);box-shadow:4px 4px 0 var(--deep)}
+.howto b{width:26px;height:26px;flex:none;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:13px}
+.choose h2{font-family:var(--serif);font-weight:900;font-size:26px;letter-spacing:.08em;color:var(--deep);margin:0}
+.choose .sub{margin:0;color:var(--soft);font-size:15px}
+.avs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:360px}
+.av{background:var(--card);border:2px solid #8e99aa;box-shadow:3px 3px 0 rgba(43,61,96,.25);padding:8px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.av.on{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand),3px 3px 0 rgba(43,61,96,.25)}
+.avbox{width:100px;height:100px;display:block}
+.avbox svg,.av svg{width:100%;height:100%;display:block}
+.avname{font-size:15px;color:var(--ink);font-weight:700}
+.primary{background:var(--brand);color:#fff;font-family:var(--serif);font-weight:700;font-size:21px;letter-spacing:.3em;padding:14px 0;width:min(100%,300px);border-radius:0;border:2px solid var(--deep);box-shadow:4px 4px 0 var(--deep)}
 .primary:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--deep)}
-.seg{display:inline-flex;border:1.5px solid var(--brand);border-radius:999px;overflow:hidden}
-.seg button{padding:6px 14px;font-size:13px;color:var(--brand)}
-.seg button[aria-pressed="true"]{background:var(--brand);color:#fff}
-.best{font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums;min-height:18px}
+.best{font-size:14px;color:var(--soft);font-variant-numeric:tabular-nums;min-height:18px}
+.ghostbtn{font-size:15px;color:var(--brand);border:1px solid var(--brand);border-radius:999px;padding:6px 18px}
 
 /* HUD */
 .hud{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:end;font-variant-numeric:tabular-nums;padding:0 4px}
-.hud .lbl{font-size:10.5px;letter-spacing:.14em;color:var(--soft)}
-.hud .val{font-family:var(--pix);font-weight:700;font-size:20px;color:var(--deep);line-height:1.1}
+.hud .lbl{font-size:12.5px;letter-spacing:.14em;color:var(--soft)}
+.hud .val{font-family:var(--pix);font-weight:700;font-size:25px;color:var(--deep);line-height:1.1}
 .hud .r{text-align:right}
 .hud .clock.low .val{color:var(--bad)}
-.stagebar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--soft);padding:0 4px;min-height:18px}
-.stagebar .combo{color:var(--gold);font-weight:700}
-.tip{background:var(--card);border:2px dashed var(--brand);border-radius:0;padding:7px 10px;font-size:13px;color:var(--deep);text-align:center;min-height:34px;display:flex;align-items:center;justify-content:center}
+.stagebar{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--soft);padding:0 4px;min-height:20px}
+.tip{background:var(--card);border:2px dashed var(--brand);border-radius:0;padding:7px 10px;font-size:16px;color:var(--deep);text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;line-height:1.4}
 
 /* 出餐台 */
 .pass{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
@@ -56,143 +61,137 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .slot.empty{opacity:.55;border-style:dashed}
 .slot.ready{border-color:var(--good);box-shadow:0 0 0 3px rgba(77,122,82,.2)}
 .slot svg.dish{width:100%;height:auto;display:block;max-height:30vh;margin:0 auto}
-.slot .ticket{font-size:12px;color:var(--soft);display:flex;justify-content:space-between;gap:6px;padding:0 2px}
-.slot .name{font-family:var(--serif);font-weight:700;font-size:14px;color:var(--ink);line-height:1.3;padding:2px 2px 0;min-height:36px}
-.slot .vip{color:#fff;background:var(--gold);border-radius:4px;padding:0 5px;font-size:11px;margin-left:4px}
-.slot .recipe{display:flex;flex-wrap:wrap;gap:3px;padding:2px;min-height:22px}
-.chip{font-size:11px;padding:1px 6px;border-radius:999px;border:1px dashed var(--line);color:var(--soft)}
+.slot .ticket{font-size:14px;color:var(--soft);display:flex;justify-content:space-between;gap:6px;padding:0 2px}
+.slot .name{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--ink);line-height:1.3;padding:2px 2px 0;min-height:44px}
+.slot .recipe{display:flex;flex-wrap:wrap;gap:4px;padding:2px;min-height:26px}
+.chip{font-size:13px;padding:2px 7px;border-radius:999px;border:1px dashed var(--line);color:var(--soft)}
 .chip.ok{border-style:solid;border-color:var(--good);color:var(--good)}
 .chip.ok::before{content:"✓ "}
-.bar{height:5px;border-radius:5px;background:var(--steel);overflow:hidden;margin:4px 2px 0}
+.bar{height:6px;border-radius:5px;background:var(--steel);overflow:hidden;margin:4px 2px 0}
 .bar i{display:block;height:100%;width:100%;background:var(--brand);transform-origin:left}
 .bar.warn i{background:var(--bad)}
-.serve{margin-top:6px;width:100%;padding:9px 0;border-radius:10px;background:var(--steel);color:var(--soft);font-family:var(--serif);font-weight:900;letter-spacing:.25em;font-size:15px;opacity:.6}
+.serve{margin-top:6px;width:100%;padding:10px 0;border-radius:10px;background:var(--steel);color:var(--soft);font-family:var(--serif);font-weight:900;letter-spacing:.25em;font-size:17px;opacity:.6}
 .slot.ready .serve{background:var(--good);color:#fff;opacity:1;animation:pulse 1s infinite}
 @keyframes pulse{50%{filter:brightness(1.12)}}
-.slot .msg{position:absolute;left:50%;top:44%;transform:translateX(-50%);background:var(--bad);color:#fff;font-size:13px;padding:4px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:3}
-.slot .msg.show{opacity:1}
-.slot .msg.ok{background:var(--good)}
 .slot.shake{animation:shake .3s}
 @keyframes shake{25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
-.float{position:absolute;left:50%;top:40%;transform:translateX(-50%);font-family:var(--serif);font-weight:900;font-size:26px;color:var(--deep);pointer-events:none;animation:rise .9s ease-out forwards;z-index:4;text-shadow:0 2px 0 var(--paper)}
+.float{position:absolute;left:50%;top:40%;transform:translateX(-50%);font-family:var(--serif);font-weight:900;font-size:32px;color:var(--deep);pointer-events:none;animation:rise .9s ease-out forwards;z-index:4;text-shadow:0 2px 0 var(--paper)}
 @keyframes rise{to{transform:translate(-50%,-50px);opacity:0}}
 
 /* 廚房區 */
 .kitchen{flex:none;min-height:0;display:flex;flex-direction:column;gap:6px;overflow-y:auto;background:linear-gradient(#dfe4eb,#cfd6e0);border-radius:0;padding:8px;border:2px solid var(--deep)}
-.row-title{font-size:11px;letter-spacing:.14em;color:var(--soft);display:flex;justify-content:space-between;align-items:center}
-.stations{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.station{background:linear-gradient(#e9edf3,#d6dce5);border:2px solid #8e99aa;border-radius:0;padding:5px 4px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:84px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.06)}
-.station.locked{opacity:.4}
-.station.over{border-color:var(--brand);box-shadow:0 0 0 3px rgba(64,88,128,.2)}
-.station .sname{font-size:12px;color:var(--deep);font-weight:700}
-.station .burners{display:flex;gap:6px}
-.burner{width:46px;height:46px;border-radius:50%;background:#b9c1cc;border:2px solid #9aa4b1;display:grid;place-items:center;position:relative;touch-action:none}
-.burner.on{background:radial-gradient(circle,#fff3d6 0%,#f0b25a 70%);box-shadow:0 0 12px rgba(240,140,60,.5)}
-.burner.ready{box-shadow:0 0 0 3px var(--good),0 0 14px rgba(77,122,82,.5)}
-.burner svg{width:38px;height:38px;pointer-events:none}
-.burner .prog{position:absolute;left:4px;right:4px;bottom:-7px;height:4px;border-radius:4px;background:var(--steel);overflow:hidden}
-.burner .prog i{display:block;height:100%;background:var(--brand)}
+.row-title{font-size:13.5px;letter-spacing:.12em;color:var(--soft);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.row-title span+span{font-size:12.5px;letter-spacing:0}
 .noodles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .pack{background:var(--card);border:2px solid #8e99aa;border-radius:0;box-shadow:2px 2px 0 rgba(43,61,96,.25);padding:4px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
-.pack svg{width:38px;height:38px;pointer-events:none}
-.pack span{font-size:10px;line-height:1.2;text-align:center;color:var(--ink)}
-.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;font-size:12px;padding:4px 10px;border-radius:0;border:1px solid var(--brand);color:var(--brand);background:transparent;position:relative}
+.pack svg{width:42px;height:42px;pointer-events:none}
+.pack span{font-size:12.5px;line-height:1.2;text-align:center;color:var(--ink)}
+.tabs{display:flex;flex-wrap:wrap;gap:5px}
+.tab{flex:none;font-size:14.5px;padding:5px 10px;border-radius:0;border:1px solid var(--brand);color:var(--brand);background:transparent;position:relative}
 .tab[aria-pressed="true"]{background:var(--brand);color:#fff}
-.tab.need::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:var(--gold);border:1.5px solid #fff}
+.tab.need::after{content:"";position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:var(--gold);border:1.5px solid #fff}
 .tab.locked{opacity:.35}
-.fridge{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;align-content:start;flex:1;min-height:0;overflow-y:auto}
-.ing{background:var(--card);border:2px solid #8e99aa;border-radius:0;box-shadow:2px 2px 0 rgba(43,61,96,.2);padding:3px 1px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0}
-.ing svg{width:26px;height:26px;pointer-events:none}
-.ing span{font-size:9.5px;line-height:1.15;text-align:center;word-break:break-all}
-.ing.dim{opacity:.4}
-.ing .tag{font-size:9.5px;color:var(--gold);font-weight:700}
-.trash{align-self:flex-end;font-size:12px;color:var(--soft);padding:4px 10px;border:1px dashed var(--soft);border-radius:8px}
+.fridge{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;align-content:start;flex:1;min-height:0;overflow-y:auto}
+.ing{background:var(--card);border:2px solid #8e99aa;border-radius:0;box-shadow:2px 2px 0 rgba(43,61,96,.2);padding:4px 2px 5px;display:flex;flex-direction:column;align-items:center;gap:2px;touch-action:none;min-width:0;position:relative}
+.ing svg{width:34px;height:34px;pointer-events:none}
+.ing span{font-size:12.5px;line-height:1.15;text-align:center;word-break:break-all}
+.ing .tag{font-size:11.5px;color:var(--gold);font-weight:700}
+
+/* 廚師工作區（畫面最下面） */
+.worker{flex:none;display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--deep);padding:6px 10px 6px 6px;box-shadow:3px 3px 0 rgba(43,61,96,.3)}
+.wkav{width:60px;height:60px;flex:none;animation:bob 1.2s steps(2) infinite}
+.wkav svg{width:100%;height:100%;display:block}
+@keyframes bob{50%{transform:translateY(-2px)}}
+.wkbub{flex:1;min-width:0;font-size:16px;color:var(--deep);background:#fff;border:2px solid var(--deep);padding:8px 12px;min-height:46px;display:flex;align-items:center;line-height:1.35}
+
+/* 炙燒／油封的火焰動畫 */
+.fx{position:fixed;width:64px;height:64px;transform:translate(-50%,-50%);pointer-events:none;z-index:55}
+.fx i{position:absolute;bottom:0;left:6px;width:14px;height:14px;background:#9aa0a8;box-shadow:0 0 0 2px #d6d9de;animation:puff .5s ease-out forwards}
+.fx i:nth-child(2){left:26px;animation-delay:.12s}
+.fx i:nth-child(3){left:14px;animation-delay:.22s}
+.fx.steam i{background:#ffffff;box-shadow:0 0 0 2px #cfd8e0}
+@keyframes puff{0%{transform:translateY(0) scale(.6);opacity:.95}100%{transform:translateY(-46px) scale(1.6);opacity:0}}
 
 /* 拖曳中的影子 */
 .ghost{position:fixed;left:0;top:0;pointer-events:none;z-index:50;transform:translate(-50%,-70%);opacity:.95;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25))}
 .ghost svg{width:52px;height:52px;display:block}
-.ghost span{display:block;font-size:11px;background:var(--deep);color:#fff;border-radius:6px;padding:1px 6px;margin-top:2px;white-space:nowrap;text-align:center}
-.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:#fff;font-size:14px;padding:8px 14px;border-radius:0;border:2px solid #fff;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.ghost span{display:block;font-size:13px;background:var(--deep);color:#fff;border-radius:6px;padding:1px 6px;margin-top:2px;white-space:nowrap;text-align:center}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:#fff;font-size:16px;padding:9px 16px;border-radius:0;border:2px solid #fff;opacity:0;transition:opacity .2s;pointer-events:none;z-index:60;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1}
 .toast.ok{background:var(--good)}
-.ing,.pack,.burner,.tab,.station{-webkit-touch-callout:none}
+[data-src]{cursor:grab;-webkit-touch-callout:none}
+[data-src]:active{cursor:grabbing}
 
 /* 結算 */
-.result{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+.result{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
 .stars{display:flex;gap:6px}
-.stars svg{width:36px;height:36px}
+.stars svg{width:38px;height:38px}
 .rank{font-family:var(--serif);font-weight:900;font-size:30px;color:var(--deep);letter-spacing:.08em;margin:0}
-.big{font-family:var(--pix);font-weight:900;font-size:52px;line-height:1;font-variant-numeric:tabular-nums}
+.big{font-family:var(--pix);font-weight:900;font-size:56px;line-height:1;font-variant-numeric:tabular-nums}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);width:100%;max-width:340px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
 .stats div+div{border-left:1px dotted var(--line)}
-.stats b{display:block;font-family:var(--pix);font-size:20px;font-variant-numeric:tabular-nums;color:var(--deep)}
-.stats span{font-size:11px;color:var(--soft)}
-.newbest{color:var(--gold);font-weight:700;font-size:13px;letter-spacing:.1em}
-.ghostbtn{font-size:13px;color:var(--brand);border:1px solid var(--brand);border-radius:999px;padding:6px 18px}
+.stats b{display:block;font-family:var(--pix);font-size:22px;font-variant-numeric:tabular-nums;color:var(--deep)}
+.stats span{font-size:13px;color:var(--soft)}
+.newbest{color:var(--gold);font-weight:700;font-size:15px;letter-spacing:.1em}
 
-[data-src]{cursor:grab}
-[data-src]:active{cursor:grabbing}
-.intro,.result{flex:1;min-height:0}
-
-/* 手機較矮的螢幕：縮小出餐台與爐台，讓冰箱還看得到 */
+/* 手機較矮的螢幕：縮小出餐台，讓冰箱與廚師還看得到 */
 @media (max-height:760px), (max-width:899px) and (max-height:900px){
   .row-title{display:none}
   .stagebar{display:none}
   .noodles{gap:4px}
   .pack{padding:2px 1px 3px}
-  .pack span{font-size:9px}
+  .pack span{font-size:11px}
+  .pack svg{width:34px;height:34px}
   .slot svg.dish{max-height:20vh}
-  .slot .name{min-height:0;font-size:13px}
+  .slot .name{min-height:0;font-size:15px}
   .slot .recipe{min-height:0}
-  .serve{margin-top:4px;padding:6px 0;font-size:13px}
-  .station{min-height:64px;padding:3px 3px 4px}
-  .burner{width:36px;height:36px}
-  .burner svg{width:26px;height:26px}
-  .tip{min-height:26px;padding:4px 8px;font-size:12px}
-  .hud .val{font-size:17px}
+  .serve{margin-top:4px;padding:7px 0;font-size:15px}
+  .tip{min-height:32px;padding:4px 8px;font-size:14.5px}
+  .hud .val{font-size:20px}
   .kitchen{padding:5px;gap:4px}
-  .station{min-height:58px}
-  .pack svg{width:30px;height:30px}
-  .ing svg{width:22px;height:22px}
+  .ing svg{width:28px;height:28px}
+  .ing span{font-size:11.5px}
+  .wkav{width:60px;height:60px}
+  .wkbub{font-size:14.5px;min-height:38px;padding:5px 10px}
+  .worker{padding:4px 8px 4px 4px}
+  .avbox{width:80px;height:80px}
 }
 
-/* 手機較高的螢幕：出餐台可以大一點 */
+/* 手機較高的螢幕：出餐台與冰箱可以大一點 */
 @media (max-width:899px) and (min-height:800px){
   .kitchen{flex:1;gap:10px;padding:10px}
-  .station{min-height:124px}
-  .burner{width:56px;height:56px}
-  .burner svg{width:40px;height:40px}
-  .ing svg{width:36px;height:36px}
-  .ing span{font-size:11px}
-  .pack svg{width:46px;height:46px}
-  .pack span{font-size:11px}
-  .tab{font-size:13px;padding:5px 12px}
-  .fridge{gap:6px}
+  .ing svg{width:40px;height:40px}
+  .ing span{font-size:13px}
+  .pack svg{width:50px;height:50px}
+  .pack span{font-size:13px}
+  .tab{font-size:15.5px;padding:6px 12px}
+  .fridge{gap:7px}
 }
 
 /* 電腦版：左邊出餐台、右邊廚房，整個畫面不用捲動 */
 @media (min-width:900px){
-  #app{max-width:1200px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:auto auto auto minmax(0,1fr);gap:10px 22px;padding:18px 24px}
+  #app{max-width:1200px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:auto auto auto minmax(0,1fr) auto;gap:10px 22px;padding:18px 24px}
   .hud{grid-column:1/-1;grid-row:1}
   .stagebar{grid-column:1/-1;grid-row:2}
   .tip{grid-column:1/-1;grid-row:3}
-  .intro,.result{grid-column:1/-1;grid-row:1/-1}
+  .intro,.choose,.result{grid-column:1/-1;grid-row:1/-1}
   .pass{grid-column:1;grid-row:4;grid-template-columns:1fr;min-height:0;overflow-y:auto;align-content:start;padding:2px}
   .pass.one{grid-template-columns:1fr}
-  .slot svg.dish{max-height:240px}
-  .kitchen{grid-column:2;grid-row:4;min-height:0;overflow-y:auto;padding:12px;gap:10px}
-  .station{min-height:112px}
-  .burner{width:56px;height:56px}
-  .burner svg{width:44px;height:44px}
-  .fridge{grid-template-columns:repeat(8,1fr);gap:6px}
-  .ing svg{width:34px;height:34px}
-  .ing span{font-size:11px}
-  .pack svg{width:44px;height:44px}
-  .pack span{font-size:11.5px}
-  .hud .val{font-size:26px}
-  .slot .name{font-size:17px}
+  .slot svg.dish{max-height:260px}
+  .worker{grid-column:1;grid-row:5}
+  .kitchen{grid-column:2;grid-row:4/6;min-height:0;overflow-y:auto;padding:14px;gap:12px}
+  .fridge{grid-template-columns:repeat(7,1fr);gap:8px}
+  .ing svg{width:44px;height:44px}
+  .ing span{font-size:13.5px}
+  .pack svg{width:52px;height:52px}
+  .pack span{font-size:13.5px}
+  .tab{font-size:15.5px;padding:6px 12px}
+  .hud .val{font-size:28px}
+  .slot .name{font-size:19px}
+  .slot .chip{font-size:14px}
+  .wkav{width:80px;height:80px}
+  .wkbub{font-size:18px}
+  .avbox{width:120px;height:120px}
 }
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -241,16 +240,16 @@ window.IC={
 </script>
 <script>
 window.DATA = {
-  // 五款拌麵的麵體（野菜雞絲拌麵改成青綠色麵）
+  // 五款拌麵的麵體：澳洲黃金小麥中直麵是淡黃棕色，放入醬汁後才會變綠（見 turnGreen）
   BASES: {
     camellia: { zh: "山茶花粗捲麵", en: "Camellia curly", color: "#e7b64a", wave: "curly" },
     squidink: { zh: "墨魚汁中直麵", en: "Squid ink straight", color: "#1d1d22", wave: "straight" },
     knife:    { zh: "刀削波浪麵", en: "Knife-cut wavy", color: "#ecc56a", wave: "ribbon" },
-    golden:   { zh: "青汁小麥麵", en: "Green wheat", color: "#8fc24a", wave: "straight" },
+    golden:   { zh: "澳洲黃金小麥中直麵", en: "Australian golden wheat", color: "#e2c26a", wave: "straight" },
     stone:    { zh: "石臼細扁麵", en: "Stone-mill flat", color: "#d6b06a", wave: "thin" }
   },
 
-  // 食材（已取消爐台：所有料都從冰箱直接拿）
+  // 食材：cook 為烹調方式（炙燒、炒、油封會冒煙，蒸烤會冒蒸氣）；pre 的食材不在冰箱裡，是一入座就已經在盤上
   ING: {
     egg:        { zh: "溏心蛋", en: "Soft egg", icon: "egg" },
     kongxin:    { zh: "醋漬空心菜", en: "Pickled water spinach", icon: "kongxin" },
@@ -265,15 +264,15 @@ window.DATA = {
     chervil:    { zh: "山蘿蔔葉", en: "Chervil", icon: "chervil" },
     arugula:    { zh: "芝麻葉", en: "Arugula", icon: "arugula" },
     crispyRice: { zh: "炸鍋巴", en: "Crispy rice", icon: "crispyRice" },
-    wagyu:      { zh: "和牛臉頰", en: "Wagyu cheek", icon: "wagyu" },
-    squid:      { zh: "中卷", en: "Squid", icon: "squid" },
-    kailan:     { zh: "芥藍花", en: "Kailan", icon: "kailan" },
-    cauli:      { zh: "白花椰", en: "Cauliflower", icon: "cauli" },
-    pork:       { zh: "炒豬肉", en: "Stir-fried pork", icon: "pork" },
-    tripe:      { zh: "牛肚", en: "Beef tripe", icon: "tripe" },
-    duck:       { zh: "油封鴨腿絲", en: "Duck confit", icon: "duck" },
-    jowl:       { zh: "松阪豬", en: "Pork jowl", icon: "jowl" },
-    chickenleg: { zh: "文昌雞腿", en: "Chicken leg", icon: "chickenleg" },
+    wagyu:      { zh: "和牛臉頰", en: "Wagyu cheek", icon: "wagyu", cook: "炙燒" },
+    squid:      { zh: "中卷", en: "Squid", icon: "squid", cook: "炒" },
+    kailan:     { zh: "芥藍花", en: "Kailan", icon: "kailan", cook: "炙燒" },
+    cauli:      { zh: "白花椰", en: "Cauliflower", icon: "cauli", cook: "炙燒" },
+    pork:       { zh: "炒豬肉", en: "Stir-fried pork", icon: "pork", cook: "炒" },
+    tripe:      { zh: "牛肚", en: "Beef tripe", icon: "tripe", cook: "炒" },
+    duck:       { zh: "油封鴨腿絲", en: "Duck confit", icon: "duck", cook: "油封" },
+    jowl:       { zh: "松阪豬", en: "Pork jowl", icon: "jowl", cook: "蒸烤" },
+    chickenleg: { zh: "文昌雞腿", en: "Chicken leg", icon: "chickenleg", cook: "蒸烤" },
     nostoc:     { zh: "雨來菇", en: "Nostoc", icon: "nostoc" },
     kombu:      { zh: "鹽昆布絲", en: "Shio kombu", icon: "kombu" },
     buckwheat:  { zh: "炸蕎麥", en: "Fried buckwheat", icon: "buckwheat" },
@@ -292,27 +291,33 @@ window.DATA = {
     tremella:   { zh: "銀耳雪燕", en: "Snow fungus", icon: "tremella" },
     puree:      { zh: "地瓜南瓜醬", en: "Yam purée", icon: "puree" },
     brownSugar: { zh: "黑糖", en: "Brown sugar", icon: "brownSugar" },
-    nitroBall:  { zh: "氮氣球", en: "Nitro foam", icon: "nitroBall" }
+    nitroBall:  { zh: "氮氣球", en: "Nitro foam", icon: "nitroBall" },
+    // 已切好、一入座就放在盤上的配菜
+    cucumber:   { zh: "黃瓜", en: "Cucumber", icon: "cucumber" },
+    tomato:     { zh: "番茄", en: "Tomato", icon: "tomato" },
+    okra:       { zh: "秋葵", en: "Okra", icon: "okra" },
+    cabbage:    { zh: "紅麴高麗菜乾", en: "Red koji cabbage", icon: "cabbage" },
+    tofu:       { zh: "豆腐", en: "Tofu", icon: "tofu" }
   },
 
-  // 菜單：cat 決定容器與出現時機；pre 代表一入座就已經在盤子上的料；sauce 為碗裡的醬汁底色
+  // 菜單：cat 決定容器與出現時機；pre 為一入座就在盤上的料；turnGreen 為加了配料後麵條變成的顏色；ordered 代表 items 要照順序放
   DISHES: [
     { id: "n1", cat: "noodle", no: "①", zh: "炙燒和牛臉頰拌麵", en: "Seared Wagyu Cheek Noodles", price: 380, base: "camellia", items: ["wagyu", "kailan", "egg", "kongxin"] },
     { id: "n2", cat: "noodle", no: "②", zh: "黑豉椒香墨魚麵", en: "Squid Ink Noodles", price: 290, base: "squidink", items: ["squid", "kailan", "egg", "woodear"] },
     { id: "n3", cat: "noodle", no: "③", zh: "蝦汁烏魚子刀削麵", en: "Knife-Cut Mullet Roe Noodles", price: 280, base: "knife", items: ["chayote", "cordyceps", "sorghum", "karasumi"] },
-    { id: "n4", cat: "noodle", no: "④", zh: "野菜雞絲拌麵", en: "Shredded Chicken Noodles", price: 280, base: "golden", sauce: "#d6eea0", items: ["cauli", "chicken", "garlicKoji", "barley", "egg", "chervil"] },
+    { id: "n4", cat: "noodle", no: "④", zh: "野菜雞絲拌麵", en: "Shredded Chicken Noodles", price: 280, base: "golden", turnGreen: "#8fc24a", items: ["cauli", "chicken", "garlicKoji", "barley", "egg", "chervil"] },
     { id: "n5", cat: "noodle", no: "⑤", zh: "油封鴨腿絲拌麵", en: "Duck Confit Noodles", price: 260, base: "stone", items: ["duck", "arugula", "egg", "crispyRice"] },
 
-    { id: "s1", cat: "side", zh: "昆布漬黃瓜", en: "Kombu Cucumber", price: 40, items: ["kombu"] },
-    { id: "s2", cat: "side", zh: "川麻雨來菇", en: "Mala Nostoc", price: 60, pre: ["nostoc"], items: ["nostoc", "buckwheat"] },
-    { id: "s3", cat: "side", zh: "薑汁番茄", en: "Ginger Tomato", price: 60, items: ["gingerSoy", "sugar"] },
-    { id: "s4", cat: "side", zh: "豆香味噌秋葵", en: "Miso Okra", price: 60, items: ["miso"] },
-    { id: "s5", cat: "side", zh: "紅麴高麗菜乾", en: "Red Koji Cabbage", price: 60, items: ["sesame"] },
-    { id: "s6", cat: "side", zh: "堅果豆腐", en: "Nut Tofu", price: 60, items: ["sauce", "nuts"] },
+    { id: "s1", cat: "side", zh: "昆布漬黃瓜", en: "Kombu Cucumber", price: 40, pre: ["cucumber"], items: ["kombu"] },
+    { id: "s2", cat: "side", zh: "川麻雨來菇", en: "Mala Nostoc", price: 60, pre: ["nostoc"], items: ["buckwheat"] },
+    { id: "s3", cat: "side", zh: "薑汁番茄", en: "Ginger Tomato", price: 60, pre: ["tomato"], items: ["gingerSoy", "sugar"] },
+    { id: "s4", cat: "side", zh: "豆香味噌秋葵", en: "Miso Okra", price: 60, pre: ["okra"], items: ["miso"] },
+    { id: "s5", cat: "side", zh: "紅麴高麗菜乾", en: "Red Koji Cabbage", price: 60, pre: ["cabbage"], items: ["sesame"] },
+    { id: "s6", cat: "side", zh: "堅果豆腐", en: "Nut Tofu", price: 60, pre: ["tofu"], items: ["sauce", "nuts"] },
     { id: "s7", cat: "side", zh: "肉香花椰菜乾", en: "Cauliflower with Pork", price: 120, items: ["cauli", "pork"] },
     { id: "s8", cat: "side", zh: "油封白切松阪豬", en: "Pork Jowl", price: 180, items: ["jowl", "garlicSoy"] },
     { id: "s9", cat: "side", zh: "辣炒筍牛肚", en: "Beef Tripe", price: 220, items: ["tripe", "bamboo"] },
-    { id: "s10", cat: "side", zh: "油封文昌雞腿", en: "Wenchang Chicken Leg", price: 240, items: ["chickenleg", "lettuce"] },
+    { id: "s10", cat: "side", zh: "油封文昌雞腿", en: "Wenchang Chicken Leg", price: 240, ordered: true, items: ["lettuce", "chickenleg", "gingerSoy"] },
 
     { id: "p1", cat: "soup", zh: "酸白菜蔬菜湯", en: "Pickled Cabbage Soup", price: 80, items: ["broth1", "greenBean"] },
     { id: "p2", cat: "soup", zh: "干貝燉雞湯", en: "Scallop Chicken Soup", price: 200, items: ["broth2", "cordyceps"] },
@@ -327,21 +332,21 @@ window.DATA = {
     { until: 180, slots: 2, label: { zh: "第三段：湯與甜品", en: "Stage 3: Soups & dessert" } }
   ],
 
-  // 冰箱分頁：每頁約 6～7 格；ids 為該頁食材
+  // 冰箱分類：依「菜、肉、配料、醬料、湯、甜品」分頁，每頁不超過 7 格
   TABS: [
-    { key: "m1", zh: "麵・蛋菜", phase: 0, ids: ["egg", "kongxin", "woodear", "chayote", "cordyceps", "sorghum", "crispyRice"] },
-    { key: "m2", zh: "麵・配料", phase: 0, ids: ["karasumi", "chicken", "garlicKoji", "barley", "chervil", "arugula"] },
-    { key: "m3", zh: "炙燒・油封", phase: 0, ids: ["wagyu", "squid", "kailan", "cauli", "duck"] },
-    { key: "s1", zh: "小菜", phase: 1, ids: ["kombu", "buckwheat", "gingerSoy", "sugar", "miso", "sesame"] },
-    { key: "s2", zh: "小菜②", phase: 1, ids: ["sauce", "nuts", "garlicSoy", "lettuce", "bamboo"] },
-    { key: "s3", zh: "炒・烤肉", phase: 1, ids: ["pork", "tripe", "jowl", "chickenleg"] },
-    { key: "soup", zh: "湯", phase: 2, ids: ["broth1", "broth2", "greenBean"] },
-    { key: "dessert", zh: "甜品", phase: 2, ids: ["tremella", "puree", "brownSugar", "nitroBall"] }
+    { key: "veg",     zh: "菜",       phase: 0, ids: ["kongxin", "woodear", "chayote", "cordyceps", "kailan", "cauli", "chervil"] },
+    { key: "meat",    zh: "肉・海鮮", phase: 0, ids: ["wagyu", "squid", "duck", "chicken", "karasumi"] },
+    { key: "pantry",  zh: "配料",     phase: 0, ids: ["egg", "sorghum", "crispyRice", "barley", "garlicKoji", "arugula", "buckwheat"] },
+    { key: "veg2",    zh: "菜②",      phase: 1, ids: ["lettuce", "bamboo", "kombu", "sesame"] },
+    { key: "meat2",   zh: "肉②",      phase: 1, ids: ["pork", "tripe", "jowl", "chickenleg"] },
+    { key: "sauce",   zh: "醬料",     phase: 1, ids: ["gingerSoy", "sugar", "miso", "sauce", "nuts", "garlicSoy"] },
+    { key: "soup",    zh: "湯",       phase: 2, ids: ["broth1", "broth2", "greenBean"] },
+    { key: "dessert", zh: "甜品",     phase: 2, ids: ["tremella", "puree", "brownSugar", "nitroBall"] }
   ]
 };
 </script>
 <script>
-// 像素風繪製：用遮罩自動上陰影，產生 16×16 食材圖與 64×64 出餐容器
+// 像素風繪製：用遮罩自動上陰影，產生 16×16 食材圖、64×64 出餐容器與 20×20 廚師小人
 (function () {
   const D = window.DATA;
 
@@ -442,7 +447,8 @@ window.DATA = {
     tan: { 1: "#6e5230", 2: "#c9a26a", 3: "#eccf98", 4: "#9d7a48", 5: "#6e5230" },
     sauce: { 1: "#3d1f0c", 2: "#a8642a", 3: "#d8985a", 4: "#6e3a16", 5: "#f0c080" },
     steel: { 1: "#4d5763", 2: "#b9c1cc", 3: "#e6ebf1", 4: "#8a94a3", 5: "#f0a050" },
-    flame: { 1: "#8a2a10", 2: "#f28a28", 3: "#ffd46a", 4: "#d24a18", 5: "#fff1a8" }
+    flame: { 1: "#8a2a10", 2: "#f28a28", 3: "#ffd46a", 4: "#d24a18", 5: "#fff1a8" },
+    saucer: { 1: "#7a6a5a", 2: "#f7f7f2", 3: "#ffffff", 4: "#d6d9dc", 5: "#a8642a" }
   };
 
   // ---------- 食材形狀 ----------
@@ -507,7 +513,8 @@ window.DATA = {
       ell(a, 7, 10, 3, 1);
     },
     oven(m, a) { rrect(m, 1, 2, 15, 14, 1); ell(a, 8, 8, 3, 3); a[4][13] = 1; a[7][13] = 1; },
-    stove(m, a) { rrect(m, 1, 11, 15, 14, 1); ell(m, 8, 7.5, 3.6, 4.8); ell(a, 8, 8.5, 1.8, 2.8); }
+    stove(m, a) { rrect(m, 1, 11, 15, 14, 1); ell(m, 8, 7.5, 3.6, 4.8); ell(a, 8, 8.5, 1.8, 2.8); },
+    saucer(m, a) { ell(m, 8, 8.5, 6.5, 4.8); ell(a, 8, 8.5, 3.6, 2.4); }
   };
 
   // 食材 → [形狀, 色盤]
@@ -516,12 +523,14 @@ window.DATA = {
     cordyceps: ["stick", "orange"], sorghum: ["pile", "brown"], karasumi: ["pile", "orange"], chicken: ["strand", "cream"],
     garlicKoji: ["ball", "cream"], barley: ["pile", "cream"], chervil: ["sprig", "green"], arugula: ["leaf", "green"],
     crispyRice: ["pile", "white"], wagyu: ["slab", "brown"], squid: ["curl", "pink"], kailan: ["sprig", "darkgreen"],
-    cauli: ["cluster", "cream"], duck: ["shred", "brown"], nostoc: ["blob", "brown"], pork: ["slab", "redmeat"], jowl: ["slab", "pink"],
+    cauli: ["cluster", "cream"], duck: ["shred", "brown"], pork: ["slab", "redmeat"], jowl: ["slab", "pink"],
     tripe: ["curl", "cream"], chickenleg: ["leg", "brown"], kombu: ["curl", "black"], buckwheat: ["pile", "tan"],
     gingerSoy: ["drop", "sauce"], sugar: ["pile", "white"], miso: ["drop", "yellow"], sesame: ["pile", "cream"],
-    sauce: ["drop", "sauce"], nuts: ["pile", "tan"], garlicSoy: ["ball", "sauce"], lettuce: ["leaf", "lightgreen"],
+    sauce: ["drop", "sauce"], nuts: ["pile", "tan"], garlicSoy: ["saucer", "saucer"], lettuce: ["leaf", "lightgreen"],
     bamboo: ["slice", "yellow"], greenBean: ["stick", "green"], tremella: ["blob", "white"], puree: ["drop", "orange"],
     brownSugar: ["cube", "brown"], nitroBall: ["ball", "white"], broth1: ["drop", "yellow"], broth2: ["drop", "cream"],
+    nostoc: ["blob", "brown"], cucumber: ["slice", "green"], tomato: ["ball", "redmeat"], okra: ["stick", "darkgreen"],
+    cabbage: ["leaf", "redmeat"], tofu: ["cube", "cream"],
     wok: ["wok", "black"], oven: ["oven", "steel"], stove: ["stove", "flame"], ball: ["ball", "white"], round: ["ball", "white"]
   };
 
@@ -567,19 +576,6 @@ window.DATA = {
   }
 
   // 麵條小包（麵櫃用）
-  function noodleStrands(baseKey, cx, cy, r, seed, count, th) {
-    const rand = rng(seed);
-    const m = mk(64, 64), a = mk(64, 64);
-    for (let k = 0; k < count; k++) {
-      const y0 = cy + (rand() - 0.5) * 2 * r;
-      const pts = [];
-      const amp = 2 + rand() * 3, ph = rand() * 6;
-      for (let x = -r; x <= r; x += 2) pts.push([cx + x, y0 + Math.sin(x * 0.35 + ph) * amp]);
-      curve(m, pts, th);
-    }
-    return { m, a };
-  }
-
   function packSVG(baseKey) {
     const b = D.BASES[baseKey];
     const pal = palFromHex(b.color);
@@ -614,7 +610,7 @@ window.DATA = {
         if (d > 27.5) g[y][x] = "#2f3b52";
         else if (d > 25) g[y][x] = "#7d8ba6";
         else if (d > 23) g[y][x] = "#2f3b52";
-        else g[y][x] = isSoup ? (broth || "#e8d9a6") : (dish.sauce || "#f5f1e7");
+        else g[y][x] = isSoup ? (broth || "#e8d9a6") : "#f5f1e7";
       }
     }
     if (isSoup) {
@@ -624,6 +620,8 @@ window.DATA = {
       }
     }
     if (!isSoup && base) {
+      // 麵條：加了配料之後才變成綠色（有 turnGreen 的菜）
+      const noodleHex = dish.turnGreen && have.length ? dish.turnGreen : D.BASES[base].color;
       const r = rng(dish.id.charCodeAt(1) * 31 + 9);
       const m = mk(64, 64), a = mk(64, 64);
       for (let k = 0; k < 12; k++) {
@@ -634,7 +632,7 @@ window.DATA = {
       }
       for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) if (Math.hypot(x + 0.5 - 32, y + 0.5 - 32) > 21) m[y][x] = 0;
       for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) if (m[y][x] && (x * 7 + y * 3) % 11 === 0) a[y][x] = 1;
-      const idx = shade(m, a), pal = palFromHex(D.BASES[base].color);
+      const idx = shade(m, a), pal = palFromHex(noodleHex);
       for (let y = 0; y < 64; y++) for (let x = 0; x < 64; x++) if (idx[y][x]) g[y][x] = pal[idx[y][x]];
     }
     const n = have.length;
@@ -700,7 +698,65 @@ window.DATA = {
     return svg;
   }
 
-  window.ART = { icon, dishSVG, packSVG, iconKey };
+  // ---------- 廚師與動物廚師（20×20；姿勢 0 站著、1 攪拌、2 舉手）----------
+  const SHIRT = "#f5f5f3", BAND = "#c9ced6", PANTS = "#2e2b33", CHEEK = "#e8948e", OUT = "#22304a";
+  const AVATARS = [
+    { name: "阿明大廚", kind: "human", hair: "#5a3a1e", skin: "#dcb07a", hat: SHIRT, band: BAND, ponytail: true },
+    { name: "小美大廚", kind: "human", hair: "#241a14", skin: "#f0c7a0", hat: SHIRT, band: "#c0453a", ponytail: false },
+    { name: "小橘・貓", kind: "cat", hair: "#e09040", skin: "#f2b878", hat: SHIRT, band: BAND, inner: "#f2a0a0" },
+    { name: "阿旺・狗", kind: "dog", hair: "#7a4a22", skin: "#e3b47e", hat: SHIRT, band: "#4a7ab0", patch: "#fbf6ea" },
+    { name: "泡泡・天竺鼠", kind: "pig", hair: "#8a5a30", skin: "#e8c08a", hat: SHIRT, band: BAND, patch: "#fbf6ea" },
+    { name: "料理鼠王", kind: "rat", hair: "#8e949c", skin: "#a9afb8", hat: "#e0b040", band: "#e0b040", inner: "#f5a0a0" }
+  ];
+  function chefGrid(av, pose) {
+    const lab = mk(20, 20); // 1 衣 2 臉/毛 3 髮 4 帽 5 袖 6 五官 7 帽帶 8 腮紅 9 褲 10 耳內 11 金 12 白斑 13 耳
+    const h = av.kind;
+    rrect(lab, 4, 13, 16, 17, 2, 1);                 // 廚師服
+    rrect(lab, 5, 17, 15, 20, 0, 9);                 // 褲子
+    lab[14][7] = 6; lab[14][12] = 6; lab[16][7] = 6; lab[16][12] = 6; // 扣子
+    seg(lab, 4.5, 14, 2.5, pose === 2 ? 8 : 17, 2, 5);                       // 左手
+    seg(lab, 15.5, 14, pose === 1 ? 16.5 : pose === 2 ? 17 : 17.5, pose === 1 ? 9 : pose === 2 ? 8 : 17, 2, 5); // 右手
+    if (h === "human") {
+      rrect(lab, 4, 5, 16, 15, 2, 3);                // 長髮
+      if (av.ponytail) rrect(lab, 15, 8, 18, 16, 1, 3);
+    }
+    if (h === "cat") { ell(lab, 4.5, 6, 1.8, 2.4, 2); ell(lab, 15.5, 6, 1.8, 2.4, 2); ell(lab, 4.6, 6.4, 0.9, 1.2, 10); ell(lab, 15.4, 6.4, 0.9, 1.2, 10); }
+    if (h === "dog") { ell(lab, 3.8, 10, 1.8, 3.2, 13); ell(lab, 16.2, 10, 1.8, 3.2, 13); }
+    if (h === "rat") { ell(lab, 4.5, 7, 3, 3, 2); ell(lab, 15.5, 7, 3, 3, 2); ell(lab, 4.5, 7, 1.7, 1.7, 10); ell(lab, 15.5, 7, 1.7, 1.7, 10); }
+    ell(lab, 10, 9.5, 4.8, 4.4, 2);                  // 臉
+    if (h === "pig") ell(lab, 13.6, 11.5, 2.4, 2, 12);
+    if (h === "dog") { ell(lab, 10, 12.4, 2.6, 1.8, 12); lab[11][10] = 6; }
+    if (h === "cat") lab[11][10] = 8;
+    if (h === "rat") lab[12][10] = 8;
+    lab[9][7] = 6; lab[9][12] = 6;                   // 眼睛
+    lab[11][6] = 8; lab[11][13] = 8;                 // 腮紅
+    if (h === "rat") {
+      rrect(lab, 6, 2, 14, 5, 0, 11);                // 王冠
+      lab[1][7] = 11; lab[1][10] = 11; lab[1][13] = 11;
+    } else {
+      ell(lab, 10, 3.2, 5.6, 3.2, 4);              // 廚師帽
+      rrect(lab, 5, 5, 15, 7, 0, 7);             // 帽帶
+    }
+    const idx = shade(lab.map(r => r.map(v => (v ? 1 : 0))), null);
+    const colorOf = { 1: SHIRT, 2: av.skin, 3: av.hair, 4: av.hat, 5: SHIRT, 7: av.band, 8: CHEEK, 9: PANTS, 10: av.inner || "#f0a0a0", 11: "#e0b040", 12: av.patch || "#fbf6ea", 13: av.hair };
+    return lab.map((row, y) => row.map((v, x) => {
+      const k = idx[y][x];
+      if (!k) return null;
+      if (v === 6 || k === 1) return OUT;
+      return palFromHex(colorOf[v])[k];
+    }));
+  }
+  const CHEF_CACHE = {};
+  function chef(i, pose) {
+    const key = i + ":" + pose;
+    if (!CHEF_CACHE[key]) {
+      const av = AVATARS[i] || AVATARS[0];
+      CHEF_CACHE[key] = toSVG(chefGrid(av, pose), av.name).replace("<svg ", '<svg class="chef" ');
+    }
+    return CHEF_CACHE[key];
+  }
+
+  window.ART = { icon, dishSVG, packSVG, iconKey, chef, AVATARS };
 })();
 </script>
 <script>
@@ -789,6 +845,13 @@ window.DATA = {
     if (sl.have.includes(id)) return "已經加過了";
     if (!dish.items.includes(id)) return id === "egg" ? "這碗沒有溏心蛋！" : "這道菜不加這個";
     if (dish.base && !sl.base) return "先放麵條";
+    if (dish.ordered) {
+      // 要照順序放：前面的料還沒放就不能放後面的
+      const idx = dish.items.indexOf(id);
+      for (let j = 0; j < idx; j++) {
+        if (!sl.have.includes(dish.items[j])) return "先放" + D.ING[dish.items[j]].zh;
+      }
+    }
     return null;
   }
 
@@ -910,12 +973,17 @@ window.DATA = {
 })();
 </script>
 <script>
-// 介面：畫面切換、拖曳與點擊、音效與動畫迴圈（簡化版：沒有爐台，料直接從冰箱拿）
+// 介面：選廚師、畫面切換、拖曳與點擊、炙燒動畫、廚師工作區、音效與動畫迴圈
 (function () {
   const D = window.DATA, A = window.ART, L = window.LOGIC, S = window.S, TOTAL = window.GAME_TOTAL;
+  const AV = A.AVATARS;
   const app = document.getElementById("app");
   const RANKS = ["洗碗小幫手", "實習廚師", "二廚", "主廚認證"];
   let raf = 0, last = 0, activeTab = D.TABS[0].key, audio = null, pend = null, ghost = null, groupOf = {};
+  let avatar = 0, pickTimer = 0, busy = false;
+  let wk = { mode: "idle", until: 0 }, wkKey = "";
+  try { avatar = +localStorage.getItem("jjs-avatar") || 0; } catch (e) { avatar = 0; }
+  if (!(avatar >= 0 && avatar < AV.length)) avatar = 0;
 
   // 每個食材屬於哪一個冰箱分頁
   D.TABS.forEach(t => t.ids.forEach(id => { groupOf[id] = t.key; }));
@@ -936,6 +1004,7 @@ window.DATA = {
     ding: () => { tone(1318, 0.5, "sine", 0.25); tone(1760, 0.6, "sine", 0.18, 0.09); },
     buzz: () => tone(150, 0.18, "square", 0.07),
     ready: () => tone(988, 0.2, "sine", 0.15),
+    sizzle: () => [0, 0.08, 0.16, 0.24, 0.32].forEach((d, i) => tone(180 + (i % 2) * 40, 0.12, "sawtooth", 0.03, d)),
     end: () => [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.4, "sine", 0.18, i * 0.12))
   };
 
@@ -948,9 +1017,11 @@ window.DATA = {
     toast._t = setTimeout(() => { t.className = "toast"; }, 1300);
   }
 
+  function stopPick() { clearInterval(pickTimer); pickTimer = 0; }
+
   // ---------- 開始畫面 ----------
   function startScreen() {
-    cancelAnimationFrame(raf);
+    cancelAnimationFrame(raf); stopPick();
     const best = L.getBest();
     app.innerHTML = `<div class="intro">
       <div class="brand">久時拌麵</div>
@@ -964,14 +1035,44 @@ window.DATA = {
       <button class="primary" id="go">開　始</button>
       <div class="best">${best ? "最高分 " + best.toLocaleString() : ""}</div>
     </div>`;
-    document.getElementById("go").onclick = startGame;
+    document.getElementById("go").onclick = chooseScreen;
+  }
+
+  // ---------- 選廚師 ----------
+  function chooseScreen() {
+    cancelAnimationFrame(raf); stopPick();
+    app.innerHTML = `<div class="choose">
+      <div class="brand">久時拌麵</div>
+      <h2>選一位廚師</h2>
+      <p class="sub">他會在畫面下方替你忙</p>
+      <div class="avs">${AV.map((a, i) => `<button class="av${i === avatar ? " on" : ""}" data-av="${i}"><span class="avbox" data-avbox="${i}">${A.chef(i, 0)}</span><span class="avname">${esc(a.name)}</span></button>`).join("")}</div>
+      <button class="primary" id="ok">就是他</button>
+      <button class="ghostbtn" id="back">回首頁</button>
+    </div>`;
+    let f = 0;
+    pickTimer = setInterval(() => {
+      f ^= 1;
+      document.querySelectorAll("[data-avbox]").forEach(el => { el.innerHTML = A.chef(+el.dataset.avbox, f); });
+    }, 450);
+    app.querySelectorAll("[data-av]").forEach(b => {
+      b.onclick = () => {
+        avatar = +b.dataset.av;
+        try { localStorage.setItem("jjs-avatar", String(avatar)); } catch (e) { }
+        app.querySelectorAll("[data-av]").forEach(x => x.classList.toggle("on", x === b));
+      };
+    });
+    document.getElementById("ok").onclick = startGame;
+    document.getElementById("back").onclick = startScreen;
   }
 
   // ---------- 遊戲畫面 ----------
   function startGame() {
+    stopPick();
     try { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.resume) audio.resume(); } catch (e) { audio = null; }
     L.resetGame();
+    busy = false;
     activeTab = D.TABS[0].key;
+    wk = { mode: "idle", until: 0 }; wkKey = "";
     app.innerHTML = `
       <div class="hud">
         <div><div class="lbl">分數</div><div class="val" id="hs">0</div></div>
@@ -984,15 +1085,17 @@ window.DATA = {
       <div class="kitchen">
         <div class="row-title"><span>麵櫃</span><span>點一下或拖到碗上</span></div>
         <div class="noodles" id="noodles"></div>
-        <div class="row-title"><span>冰箱</span><span>點一下自動放進客人的碗</span></div>
+        <div class="row-title"><span>冰箱</span><span>點一下就放進客人的碗</span></div>
         <div class="tabs" id="tabs"></div>
         <div class="fridge" id="fridge"></div>
       </div>
+      <div class="worker"><div class="wkav" id="wkav"></div><div class="wkbub" id="wksay">歡迎光臨！</div></div>
       <div class="toast" id="toast"></div>`;
     document.getElementById("noodles").innerHTML = Object.keys(D.BASES).map(k =>
       `<div class="pack" data-src='${JSON.stringify({ kind: "base", id: k })}'>${A.packSVG(k)}<span>${esc(D.BASES[k].zh)}</span></div>`
     ).join("");
     renderAll();
+    setWorker("idle", "歡迎光臨！", 1500);
     last = performance.now();
     raf = requestAnimationFrame(loop);
   }
@@ -1030,7 +1133,7 @@ window.DATA = {
       return `<div class="slot empty">
         <div class="ticket"><span>桌 ${i + 1}</span><span></span></div>
         <div class="name">等待入座</div>
-        <div style="flex:1;display:grid;place-items:center;color:var(--soft);font-size:12px;min-height:120px">下一位客人馬上來</div>
+        <div style="flex:1;display:grid;place-items:center;color:var(--soft);font-size:14px;min-height:120px">下一位客人馬上來</div>
       </div>`;
     }
     const o = sl.order, d = o.dish, done = L.complete(sl);
@@ -1058,7 +1161,7 @@ window.DATA = {
       if (!sl.order) continue;
       sl.order.dish.items.forEach(x => { if (!sl.have.includes(x)) { needed.add(groupOf[x]); needIds.add(x); } });
     }
-    // 目前分頁沒有客人要的料時，自動切到有需要的分頁
+    // 目前分類沒有客人要的料時，自動切到有需要的分類
     const cur = D.TABS.find(t => t.key === activeTab);
     if (!(cur && cur.ids.some(x => needIds.has(x)))) {
       const next = D.TABS.find(t => S.phase >= t.phase && t.ids.some(x => needIds.has(x)));
@@ -1077,36 +1180,63 @@ window.DATA = {
     box.innerHTML = ids.map(id => {
       const ing = D.ING[id];
       const src = esc(JSON.stringify({ kind: "ing", id }));
-      return `<div class="ing" data-src='${src}'>${A.icon(id, 30)}<span>${esc(ing.zh)}</span></div>`;
+      return `<div class="ing" data-src='${src}'>${A.icon(id, 34)}<span>${esc(ing.zh)}</span>${ing.cook ? '<span class="tag">' + ing.cook + "</span>" : ""}</div>`;
     }).join("");
   }
 
-  // 每一幀只更新進度條，不重畫整個畫面
-  function updateFrame() {
-    const ht = document.getElementById("ht");
-    if (ht) ht.textContent = mmss(Math.max(0, TOTAL - S.t));
-    const n = L.slotsFor(S.phase);
-    for (let i = 0; i < n; i++) {
-      const o = S.slots[i].order;
-      const el = document.querySelector(`[data-bar="slot${i}"]`);
-      if (o && el) el.style.width = Math.max(0, (o.left / o.limit) * 100) + "%";
-    }
+  // ---------- 廚師工作區 ----------
+  // mode：idle 站著等、cook 攪拌或翻面、serve 舉手歡呼
+  function setWorker(mode, say, ms) {
+    wk = { mode, until: performance.now() + (ms || 0) };
+    const el = document.getElementById("wksay");
+    if (el) el.textContent = say;
+    wkKey = "";
   }
 
-  function loop(now) {
-    const dt = Math.min(0.1, (now - last) / 1000);
-    last = now;
-    const events = L.tick(dt);
-    let finished = false;
-    events.forEach(ev => {
-      if (ev.type === "phase") { toast(D.PHASES[ev.ph].label.zh, true); sfx.ding(); }
-      if (ev.type === "fail") { toast("客人等太久走了"); sfx.buzz(); }
-      if (ev.type === "end") finished = true;
-    });
-    if (finished) return endGame();
-    if (events.length) renderAll();
-    updateFrame();
-    raf = requestAnimationFrame(loop);
+  function updateWorker(now) {
+    if (wk.mode !== "idle" && wk.until && now > wk.until) setWorker("idle", "準備好了！", 0);
+    const period = wk.mode === "cook" ? 180 : wk.mode === "serve" ? 260 : 900;
+    const f = Math.floor(now / period) % 2;
+    const pose = wk.mode === "cook" ? (f ? 1 : 0) : wk.mode === "serve" ? (f ? 2 : 0) : 0;
+    const key = wk.mode + pose;
+    if (key === wkKey) return;
+    wkKey = key;
+    const box = document.getElementById("wkav");
+    if (box) box.innerHTML = A.chef(avatar, pose);
+  }
+
+  // ---------- 炙燒與油封：先顯示火焰，再把料放進去 ----------
+  function fx(x, y, kind) {
+    const el = document.createElement("div");
+    el.className = "fx " + kind;
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.innerHTML = "<i></i><i></i><i></i>";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 600);
+  }
+
+  function isCook(p) { return p.kind === "ing" && !!D.ING[p.id].cook; }
+
+  function cookThen(p, x, y, go) {
+    if (busy) { sfx.buzz(); toast("廚師正在忙，等一下"); return; }
+    busy = true;
+    const ing = D.ING[p.id];
+    setWorker("cook", ing.cook + ing.zh + "中…", 500);
+    sfx.sizzle();
+    fx(x, y, ing.cook === "蒸烤" ? "steam" : "smoke");
+    setTimeout(() => {
+      busy = false;
+      if (!S.running) return;
+      go();
+      if (wk.mode === "cook") setWorker("idle", ing.zh + "好了！", 900);
+    }, 500);
+  }
+
+  function slotFor(p) {
+    const n = L.slotsFor(S.phase);
+    for (let i = 0; i < n; i++) if (!L.check(i, normalize(p))) return i;
+    return -1;
   }
 
   // ---------- 拖曳與點擊 ----------
@@ -1148,28 +1278,40 @@ window.DATA = {
     return p.kind === "base" ? { kind: "base", id: p.id } : { kind: "ing", id: p.id };
   }
 
-  function handleDrop(p, target) {
+  function handleDrop(p, target, x, y) {
     const [kind, key] = target.split(":");
     if (kind !== "slot") return;
     const i = +key;
-    const r = L.dropOnSlot(i, normalize(p));
-    if (r.ok) {
-      sfx.tap();
-      if (r.msg) toast(r.msg, true);
-      if (L.complete(S.slots[i])) sfx.ready();
-    } else {
-      sfx.buzz();
-      toast(r.msg);
-    }
-    renderAll();
-    if (!r.ok) { const el = document.querySelectorAll("#pass .slot")[i]; if (el) el.classList.add("shake"); }
+    const go = () => {
+      const r = L.dropOnSlot(i, normalize(p));
+      if (r.ok) {
+        sfx.tap();
+        if (r.msg) toast(r.msg, true);
+        if (L.complete(S.slots[i])) sfx.ready();
+      } else {
+        sfx.buzz();
+        toast(r.msg);
+        const el = document.querySelectorAll("#pass .slot")[i];
+        if (el) { el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); }
+      }
+      renderAll();
+    };
+    if (isCook(p) && !L.check(i, normalize(p))) return cookThen(p, x, y, go);
+    go();
   }
 
-  function handleTap(p) {
-    const r = L.tapAdd(normalize(p));
-    if (r.ok) { sfx.tap(); if (r.msg) toast(r.msg, true); }
-    else { sfx.buzz(); toast(r.msg); }
-    renderAll();
+  function handleTap(p, x, y) {
+    const go = () => {
+      const r = L.tapAdd(normalize(p));
+      if (r.ok) { sfx.tap(); if (r.msg) toast(r.msg, true); }
+      else { sfx.buzz(); toast(r.msg); }
+      renderAll();
+    };
+    if (isCook(p)) {
+      if (slotFor(p) < 0) return go(); // 沒有客人要這個，直接顯示提示
+      return cookThen(p, x, y, go);
+    }
+    go();
   }
 
   document.addEventListener("pointerdown", e => {
@@ -1194,9 +1336,9 @@ window.DATA = {
     if (wasDrag) {
       const t = targetAt(e.clientX, e.clientY);
       endDrag();
-      if (t) handleDrop(p, t);
+      if (t) handleDrop(p, t, e.clientX, e.clientY);
     } else {
-      handleTap(p);
+      handleTap(p, e.clientX, e.clientY);
     }
   });
   window.addEventListener("pointercancel", () => { pend = null; endDrag(); });
@@ -1208,6 +1350,7 @@ window.DATA = {
       const res = L.serve(i);
       if (res) {
         sfx.ding();
+        setWorker("serve", res.perfect ? "完美！客人很滿意" : "出餐囉！", 900);
         toast(res.perfect ? "完美出餐！" : "出餐！", true);
         renderAll();
         const pass = document.querySelectorAll("#pass .slot")[i];
@@ -1223,6 +1366,37 @@ window.DATA = {
     const tab = e.target.closest("[data-tab]");
     if (tab && !tab.disabled) { activeTab = tab.dataset.tab; renderAll(); }
   });
+
+  // ---------- 主迴圈 ----------
+  function loop(now) {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    const events = L.tick(dt);
+    let finished = false;
+    events.forEach(ev => {
+      if (ev.type === "phase") { toast(D.PHASES[ev.ph].label.zh, true); sfx.ding(); setWorker("idle", "新的時段開始！", 1500); }
+      if (ev.type === "new") setWorker("idle", "歡迎光臨！", 1200);
+      if (ev.type === "fail") { toast("客人等太久走了"); sfx.buzz(); setWorker("idle", "客人走了…", 1500); }
+      if (ev.type === "end") finished = true;
+    });
+    if (finished) return endGame();
+    if (events.length) renderAll();
+    updateFrame();
+    updateWorker(now);
+    raf = requestAnimationFrame(loop);
+  }
+
+  // 每一幀只更新進度條與時間，不重畫整個畫面
+  function updateFrame() {
+    const ht = document.getElementById("ht");
+    if (ht) ht.textContent = mmss(Math.max(0, TOTAL - S.t));
+    const n = L.slotsFor(S.phase);
+    for (let i = 0; i < n; i++) {
+      const o = S.slots[i].order;
+      const el = document.querySelector(`[data-bar="slot${i}"]`);
+      if (o && el) el.style.width = Math.max(0, (o.left / o.limit) * 100) + "%";
+    }
+  }
 
   // ---------- 結算 ----------
   function endGame() {
@@ -1244,7 +1418,7 @@ window.DATA = {
         <div><b>${S.missed}</b><span>客人走掉</span></div>
         <div><b>${acc}%</b><span>準確率</span></div>
       </div>
-      <p style="margin:0;color:var(--soft);font-size:13px;line-height:1.6;max-width:320px">這一班你替久時賺進 $${S.revenue.toLocaleString()}。</p>
+      <p style="margin:0;color:var(--soft);font-size:15px;line-height:1.6;max-width:320px">這一班你替久時賺進 $${S.revenue.toLocaleString()}。</p>
       <button class="primary" id="again">再玩一次</button>
       <button class="ghostbtn" id="home">回首頁</button>
     </div>`;
