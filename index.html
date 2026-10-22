@@ -79,7 +79,7 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 @keyframes rise{to{transform:translate(-50%,-50px);opacity:0}}
 
 /* 廚房區 */
-.kitchen{flex:none;min-height:0;display:flex;flex-direction:column;gap:6px;overflow-y:auto;background:linear-gradient(#dfe4eb,#cfd6e0);border-radius:0;padding:8px;border:2px solid var(--deep)}
+.kitchen{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:6px;overflow-y:auto;background:linear-gradient(#dfe4eb,#cfd6e0);border-radius:0;padding:8px;border:2px solid var(--deep)}
 .row-title{font-size:13.5px;letter-spacing:.12em;color:var(--soft);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .row-title span+span{font-size:12.5px;letter-spacing:0}
 .noodles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
@@ -142,7 +142,9 @@ button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
   .pack{padding:2px 1px 3px}
   .pack span{font-size:11px}
   .pack svg{width:34px;height:34px}
-  .slot svg.dish{max-height:20vh}
+  .slot svg.dish{max-height:15vh}
+  .slot .ticket{font-size:13px}
+  .chip{font-size:12px;padding:1px 5px}
   .slot .name{min-height:0;font-size:15px}
   .slot .recipe{min-height:0}
   .serve{margin-top:4px;padding:7px 0;font-size:15px}
